@@ -4,15 +4,16 @@
     {
       "key": "xifan",
       "name": "稀饭动漫",
-      "type": 1,
-      "api": "https://9527willyear.github.io/tvbox-source/tvbox.json",
+      "type": 3,
+      "api": "csp_Drpy",
       "searchable": 1,
-      "quickSearch": 1,
-      "filterable": 1
+      "quickSearch": 0,
+      "filterable": 0,
+      "ext": "https://9527willyear.github.io/-tvbox-source/xifan.js"
     }
   ],
   "parses": [],
-  "flags": [" youku"," qq"," iqiyi"," qiyi"," letv"," sohu"," tudou"," pptv"," mgtv"],
+  "flags": ["youku", "qq", "iqiyi", "qiyi", "letv", "sohu", "tudou", "pptv", "mgtv"],
   "rules": [],
   "ads": []
 }
