@@ -15,7 +15,7 @@ var rule = {
     searchable: 0,
     quickSearch: 0,
     filterable: 0,
-    limit: 24,
+    limit: 10,
     double: false,
     class_name: '电影&动作片&喜剧片&爱情片&科幻片&恐怖片&剧情片&战争片&动画片&记录片&电视剧&国产剧&港剧&台剧&韩剧&泰剧&美剧&海外剧&日剧&动漫&国产动漫&日韩动漫&欧美动漫&港台动漫&海外动漫&综艺&国产综艺&港台综艺&日韩综艺&欧美综艺&短剧',
     class_url: '1&6&7&8&9&10&11&12&22&23&2&13&14&15&16&24&25&26&27&3&28&29&30&31&36&4&32&33&34&35&5',
@@ -70,7 +70,7 @@ var rule = {
         try {
             let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
             let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
-            let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=24';
+            let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=10';
             let html = request(apiUrl);
             let json = JSON.parse(html);
             if (json.code == 1 && json.list && json.list.length > 0) {
@@ -95,7 +95,7 @@ var rule = {
         try {
             let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
             let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
-            let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=24';
+            let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=10';
             let html = request(apiUrl);
             let json = JSON.parse(html);
             if (json.code == 1 && json.list && json.list.length > 0) {
