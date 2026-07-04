@@ -1,10 +1,6 @@
 var rule = {
     title: '老的电影网',
     host: 'https://www.laodedy.com',
-    headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Referer': 'https://www.laodedy.com/'
-    },
     编码: 'utf-8',
     timeout: 10000,
     homeUrl: '/category/dianying.html',
@@ -97,7 +93,7 @@ var rule = {
         let html = request(url);
         let m = html.match(/var now="([^"]+)"/);
         if (m && m[1] && m[1].indexOf('http') === 0) {
-            input = { parse: 0, url: m[1], header: rule.headers };
+            input = { parse: 0, url: m[1] };
         } else {
             input = { parse: 1, url: url };
         }
