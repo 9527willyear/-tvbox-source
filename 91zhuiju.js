@@ -67,6 +67,12 @@ var rule = {
     `,
     推荐: `js:
         let d = [];
+        function fixPic(pic) {
+            if (!pic || pic.indexOf('http') !== 0) {
+                return rule.host + '/upload/mxprocms/20250103-1/f5a3f9621789e26ddbae4ee9c4f67613.png';
+            }
+            return pic;
+        }
         try {
             let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
             let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
@@ -77,7 +83,7 @@ var rule = {
                 json.list.forEach(item => {
                     d.push({
                         title: item.vod_name,
-                        pic_url: item.vod_pic,
+                        pic_url: fixPic(item.vod_pic),
                         desc: item.vod_remarks || item.vod_class || '',
                         url: rule.host + '/vod/detail/id/' + item.vod_id + '.html'
                     });
@@ -92,6 +98,12 @@ var rule = {
     `,
     一级: `js:
         let d = [];
+        function fixPic(pic) {
+            if (!pic || pic.indexOf('http') !== 0) {
+                return rule.host + '/upload/mxprocms/20250103-1/f5a3f9621789e26ddbae4ee9c4f67613.png';
+            }
+            return pic;
+        }
         try {
             let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
             let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
@@ -102,7 +114,7 @@ var rule = {
                 json.list.forEach(item => {
                     d.push({
                         title: item.vod_name,
-                        pic_url: item.vod_pic,
+                        pic_url: fixPic(item.vod_pic),
                         desc: item.vod_remarks || item.vod_class || '',
                         url: rule.host + '/vod/detail/id/' + item.vod_id + '.html'
                     });
