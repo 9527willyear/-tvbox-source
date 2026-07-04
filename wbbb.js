@@ -21,7 +21,7 @@ var rule = {
     class_url: '1&2&3&4',
     play_parse: true,
     sniffer: 0,
-    isVideo: 'http((?!http).){26,}\\.(m3u8|mp4|flv|avi|mkv|wmv|mpg|mpeg|mov|ts|3gp)',
+    isVideo: 'http((?!http).){26,}\.(m3u8|mp4|flv|avi|mkv|wmv|mpg|mpeg|mov|ts|3gp)',
     lazy: `js:
         function wbbbBtoa(s) { try { return btoa(s); } catch (e) { return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Latin1.parse(s)); } }
         function wbbbAtob(s) { try { return atob(s); } catch (e) { return CryptoJS.enc.Base64.parse(s).toString(CryptoJS.enc.Latin1); } }
@@ -188,67 +188,33 @@ var rule = {
         setResult(d);
     `,
     二级: `js:
-        let detailUrl = input;
-        if (detailUrl.indexOf('http') !== 0) {
-            detailUrl = rule.host + detailUrl;
-        }
-        let html = '';
-        try {
-            html = request(detailUrl);
-        } catch (e) {}
-        if (!html || html.length < 100) {
-            VOD = {
-                vod_id: detailUrl,
-                vod_name: '请求失败',
-                vod_pic: '',
-                vod_remarks: '',
-                vod_content: '【调试：详情页返回为空或请求异常，url=' + detailUrl + ', html长度=' + (html ? html.length : 0) + '】',
-                vod_play_from: '默认',
-                vod_play_url: '第1集$' + detailUrl
-            };
-        } else {
-            let name = pdfh(html, 'h1&&Text') || pdfh(html, '.module-info-heading h1&&Text') || '未知';
-            let pic = pd(html, '.module-info-poster img&&data-original', detailUrl) || pd(html, '.module-item-pic img&&data-original', detailUrl);
-            let year = pdfh(html, '.module-info-tag a:eq(0)&&Text') || '';
-            let area = pdfh(html, '.module-info-tag a:eq(1)&&Text') || '';
-            let actor = pdfh(html, '.module-info-item:contains(主演)&&Text') || '';
-            let director = pdfh(html, '.module-info-item:contains(导演)&&Text') || '';
-            let content = pdfh(html, '.module-info-item:contains(简介)&&Text') || pdfh(html, '.module-info-content&&Text') || '';
+        let html = request(input);
+        VOD = {};
+        VOD.vod_id = input;
+        VOD.vod_name = pdfh(html, 'h1&&Text') || pdfh(html, '.module-info-heading h1&&Text');
+        VOD.vod_pic = pd(html, '.module-info-poster img&&data-original', input) || pd(html, '.module-item-pic img&&data-original', input);
+        VOD.vod_remarks = pdfh(html, '.module-info-item:eq(0)&&Text') || '';
+        VOD.vod_year = pdfh(html, '.module-info-tag a:eq(0)&&Text') || '';
+        VOD.vod_area = pdfh(html, '.module-info-tag a:eq(1)&&Text') || '';
+        VOD.vod_actor = pdfh(html, '.module-info-item:contains(主演)&&Text') || '';
+        VOD.vod_director = pdfh(html, '.module-info-item:contains(导演)&&Text') || '';
+        VOD.vod_content = pdfh(html, '.module-info-item:contains(简介)&&Text') || pdfh(html, '.module-info-content&&Text') || '';
 
-            let tabs = pdfa(html, '.module-tab-items-box .module-tab-item').map(function(it) {
-                return pdfh(it, 'span&&Text') || pdfh(it, 'a&&Text') || pdfh(it, '.module-tab-value&&Text');
-            }).filter(Boolean);
-            if (tabs.length === 0) tabs = ['播放'];
+        let tabs = pdfa(html, '.module-tab-items-box .module-tab-item span').map(it => pdfh(it, 'span&&Text'));
+        if (tabs.length === 0) tabs = ['播放'];
+        VOD.vod_play_from = tabs.join('$$$');
 
-            let panes = pdfa(html, '.module-play-list');
-            let lists = [];
-            panes.forEach(function(pane) {
-                let episodes = pdfa(pane, '.module-play-list-link').map(function(a) {
-                    let epName = pdfh(a, 'span&&Text') || pdfh(a, 'a&&Text');
-                    let epUrl = pd(a, 'a&&href', detailUrl);
-                    return epName + '$' + epUrl;
-                });
-                lists.push(episodes.join('#'));
+        let panes = pdfa(html, '.module-play-list');
+        let lists = [];
+        panes.forEach(pane => {
+            let episodes = pdfa(pane, '.module-play-list-link').map(a => {
+                let name = pdfh(a, 'span&&Text') || pdfh(a, 'a&&Text');
+                let url = pd(a, 'a&&href', input);
+                return name + '$' + url;
             });
-            let playUrl = lists.join('$$$');
-            if (!playUrl) {
-                playUrl = '第1集$' + detailUrl;
-            }
-
-            VOD = {
-                vod_id: detailUrl,
-                vod_name: name,
-                vod_pic: pic,
-                vod_remarks: pdfh(html, '.module-info-item:eq(0)&&Text') || '',
-                vod_year: year,
-                vod_area: area,
-                vod_actor: actor,
-                vod_director: director,
-                vod_content: '【调试：html长度=' + html.length + ', 线路=' + tabs.length + ', 列表数=' + panes.length + ', 总集数=' + (lists[0] ? lists[0].split('#').length : 0) + '】\n' + content,
-                vod_play_from: tabs.join('$$$'),
-                vod_play_url: playUrl
-            };
-        }
+            lists.push(episodes.join('#'));
+        });
+        VOD.vod_play_url = lists.join('$$$');
     `,
     搜索: `js:
         let d = [];
