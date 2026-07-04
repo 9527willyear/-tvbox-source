@@ -225,7 +225,8 @@ var rule = {
         VOD.vod_director = pdfh(html, '.module-info-item:contains(导演)&&Text') || '';
         VOD.vod_content = pdfh(html, '.module-info-item:contains(简介)&&Text') || pdfh(html, '.module-info-content&&Text') || '';
 
-        let tabs = pdfa(html, '.module-tab-items-box .module-tab-item span').map(it => pdfh(it, 'span&&Text'));
+        let tabs = pdfa(html, '.module-tab-items-box .module-tab-item').map(it => pdfh(it, 'span&&Text') || pdfh(it, 'a&&Text') || pdfh(it, '.module-tab-value&&Text'));
+        tabs = tabs.filter(Boolean);
         if (tabs.length === 0) tabs = ['播放'];
         VOD.vod_play_from = tabs.join('$$$');
 
@@ -240,6 +241,8 @@ var rule = {
             lists.push(episodes.join('#'));
         });
         VOD.vod_play_url = lists.join('$$$');
+        let debugInfo = '【调试：html长度=' + (html ? html.length : 0) + ', 线路=' + tabs.length + ', 剧集列表数=' + panes.length + ', 总集数=' + (lists[0] ? lists[0].split('#').length : 0) + '】\n';
+        VOD.vod_content = debugInfo + VOD.vod_content;
 
         // 调试：解析第一集真实地址
         try {
