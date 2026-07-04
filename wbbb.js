@@ -49,16 +49,33 @@ var rule = {
         function wbbbDeplay(u, b64) { return wbbbAesplay(wbbbCalculate(u), wbbbAtob(b64)); }
 
         let playHtml = request(input, { headers: rule.headers });
-        let m = playHtml.match(/var player_aaaa=(\{[\\s\\S]*?\})(?:;|<\\/script>)/);
-        if (!m || !m[1]) {
-            input = { jx: 0, parse: 1, url: input, header: rule.headers };
+        let playerJson = '';
+        try {
+            let idx = playHtml.indexOf('var player_aaaa=');
+            if (idx >= 0) {
+                let start = idx + 'var player_aaaa='.length;
+                let depth = 0, end = -1;
+                for (let i = start; i < playHtml.length; i++) {
+                    if (playHtml[i] === '{') depth++;
+                    else if (playHtml[i] === '}') {
+                        depth--;
+                        if (depth === 0) { end = i + 1; break; }
+                    }
+                }
+                if (end > start) playerJson = playHtml.substring(start, end);
+            }
+        } catch (e) {}
+        try { log('wbbb playerJson len:' + (playerJson ? playerJson.length : 0)); } catch (e) {}
+        let player = null;
+        try { if (playerJson) player = JSON.parse(playerJson); } catch (e) {}
+        if (!player) {
+            input = { parse: 1, url: input };
         } else {
-            let player = JSON.parse(m[1]);
             let encUrl = player.url || '';
             let linkNext = player.link_next || '';
             let vodName = player.vod_data && player.vod_data.vod_name ? player.vod_data.vod_name : '';
             if (!encUrl) {
-                input = { jx: 0, parse: 1, url: input, header: rule.headers };
+                input = { parse: 1, url: input };
             } else if (/^https?:\/\/[^\\s]+\.(m3u8|mp4|flv|avi|mkv|wmv|mpg|mpeg|mov|ts|3gp)(\?.*)?$/i.test(encUrl)) {
                 input = { parse: 0, url: encUrl, header: rule.headers };
             } else {
@@ -99,9 +116,9 @@ var rule = {
                     }
                 } catch (e) {}
                 if (realUrl && realUrl.indexOf('http') === 0) {
-                    input = { jx: 0, parse: 0, url: realUrl, header: { 'User-Agent': rule.headers['User-Agent'], 'Referer': 'https://' + playerHost + '/player/' }, headers: { 'User-Agent': rule.headers['User-Agent'], 'Referer': 'https://' + playerHost + '/player/' } };
+                    input = { parse: 0, url: realUrl, header: { 'User-Agent': rule.headers['User-Agent'], 'Referer': 'https://' + playerHost + '/player/' } };
                 } else {
-                    input = { jx: 0, parse: 1, url: 'https://' + playerHost + '/player/?url=' + encodeURIComponent(encUrl) + '&next=//' + (linkNext ? 'wbbb1.com' + linkNext : '') + '&title=' + encodeURIComponent(vodName), header: rule.headers };
+                    input = { parse: 1, url: input };
                 }
             }
         }
