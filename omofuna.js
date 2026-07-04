@@ -8,7 +8,7 @@ var rule = {
     编码: 'utf-8',
     timeout: 10000,
     homeUrl: '/',
-    url: '/type/fyclass.html',
+    url: '/type/fyclass-fypage.html',
     searchUrl: '',
     searchable: 0,
     quickSearch: 0,
