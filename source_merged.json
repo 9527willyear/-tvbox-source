@@ -1,37 +1,33 @@
 {
-  "spider": "",
+  "spider": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca",
   "sites": [
     {
       "key": "xifan",
       "name": "稀饭动漫",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/xifan.js",
-      "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/xifan.js"
     },
     {
       "key": "4kvm",
       "name": "4K影视",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/4kvm.js",
-      "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/4kvm.js"
     },
     {
       "key": "juok",
       "name": "剧OK",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/juok.js",
-      "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/juok.js"
     },
     {
       "key": "xigua",
       "name": "西瓜影院",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/xigua.js",
-      "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/xigua.js"
     }
   ],
   "parses": [],
