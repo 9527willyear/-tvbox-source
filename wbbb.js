@@ -214,7 +214,7 @@ var rule = {
         function wbbbDeplay(u, b64) { return wbbbAesplay(wbbbCalculate(u), wbbbAtob(b64)); }
 
         try {
-        let html = request(input, { headers: rule.headers });
+            let html = request(input);
         VOD = {};
         VOD.vod_id = input;
         VOD.vod_name = pdfh(html, 'h1&&Text') || pdfh(html, '.module-info-heading h1&&Text');
@@ -249,7 +249,7 @@ var rule = {
         try {
             let firstEp = VOD.vod_play_url.split('$$$')[0].split('#')[0].split('$')[1];
             if (firstEp) {
-                let playHtml = request(firstEp, { headers: rule.headers });
+                let playHtml = request(firstEp);
                 let playerJson = '';
                 let idx = playHtml.indexOf('var player_aaaa=');
                 if (idx >= 0) {
