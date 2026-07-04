@@ -188,6 +188,31 @@ var rule = {
         setResult(d);
     `,
     二级: `js:
+        function wbbbBtoa(s) { try { return btoa(s); } catch (e) { return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Latin1.parse(s)); } }
+        function wbbbAtob(s) { try { return atob(s); } catch (e) { return CryptoJS.enc.Base64.parse(s).toString(CryptoJS.enc.Latin1); } }
+        function wbbbCalculate(s) { return (CryptoJS.MD5(s).toString() + ' P').slice(-22); }
+        function wbbbCalculatee(s) { return CryptoJS.MD5(s).toString(); }
+        function wbbbAesplay(keyStr, dataStr) {
+            var S = [], i, j, tmp;
+            for (i = 0; i < 256; i++) S[i] = i;
+            j = 0;
+            for (i = 0; i < 256; i++) {
+                j = (j + S[i] + keyStr.charCodeAt(i % keyStr.length)) % 256;
+                tmp = S[i]; S[i] = S[j]; S[j] = tmp;
+            }
+            i = 0; j = 0; var out = '';
+            for (var k = 0; k < dataStr.length; k++) {
+                i = (i + 1) % 256;
+                j = (j + S[i]) % 256;
+                tmp = S[i]; S[i] = S[j]; S[j] = tmp;
+                var t = (S[i] + S[j]) % 256;
+                out += String.fromCharCode(dataStr.charCodeAt(k) ^ S[t]);
+            }
+            return out;
+        }
+        function wbbbEnplay(u, plain) { return wbbbBtoa(wbbbAesplay(wbbbCalculate(u), plain)); }
+        function wbbbDeplay(u, b64) { return wbbbAesplay(wbbbCalculate(u), wbbbAtob(b64)); }
+
         let html = request(input);
         VOD = {};
         VOD.vod_id = input;
@@ -215,6 +240,67 @@ var rule = {
             lists.push(episodes.join('#'));
         });
         VOD.vod_play_url = lists.join('$$$');
+
+        // 调试：解析第一集真实地址
+        try {
+            let firstEp = VOD.vod_play_url.split('$$$')[0].split('#')[0].split('$')[1];
+            if (firstEp) {
+                let playHtml = request(firstEp, { headers: rule.headers });
+                let playerJson = '';
+                let idx = playHtml.indexOf('var player_aaaa=');
+                if (idx >= 0) {
+                    let start = idx + 'var player_aaaa='.length;
+                    let depth = 0, end = -1;
+                    for (let i = start; i < playHtml.length; i++) {
+                        if (playHtml[i] === '{') depth++;
+                        else if (playHtml[i] === '}') { depth--; if (depth === 0) { end = i + 1; break; } }
+                    }
+                    if (end > start) playerJson = playHtml.substring(start, end);
+                }
+                let player = playerJson ? JSON.parse(playerJson) : null;
+                if (player && player.url) {
+                    let encUrl = player.url;
+                    if (/^https?:\/\/[^\\s]+\.(m3u8|mp4)/i.test(encUrl)) {
+                        VOD.vod_content = '【调试：明文URL】' + encUrl + '\\n' + VOD.vod_content;
+                    } else {
+                        let playerHost = 'xn--qvr2v.850088.xyz';
+                        let u = encUrl.replace(/^http:\/\//, 'https://');
+                        u += '&next=//' + (player.link_next ? 'wbbb1.com' + player.link_next : '');
+                        let time = Math.floor(Date.now() / 1000);
+                        let key = wbbbEnplay(u, wbbbCalculatee(u + 'stray'));
+                        let vkey = wbbbEnplay(u, time + wbbbCalculatee(wbbbCalculate(u) + 'stray'));
+                        let ckey = wbbbEnplay(u, wbbbCalculatee(playerHost + 'stray'));
+                        let apiUrl = 'https://' + playerHost + '/player/api.php';
+                        let reqHeaders = {
+                            'User-Agent': rule.headers['User-Agent'],
+                            'Referer': 'https://' + playerHost + '/player/?url=' + encodeURIComponent(encUrl) + '&next=//' + (player.link_next ? 'wbbb1.com' + player.link_next : '') + '&title=' + encodeURIComponent(player.vod_data && player.vod_data.vod_name ? player.vod_data.vod_name : '')
+                        };
+                        let apiResp = '';
+                        try { apiResp = request(apiUrl, { method: 'POST', data: { url: u, key: key, vkey: vkey, ckey: ckey }, headers: reqHeaders }); } catch (e1) {}
+                        if (!apiResp || apiResp.trim().indexOf('{') !== 0) {
+                            try {
+                                let body = 'url=' + encodeURIComponent(u) + '&key=' + encodeURIComponent(key) + '&vkey=' + encodeURIComponent(vkey) + '&ckey=' + encodeURIComponent(ckey);
+                                apiResp = request(apiUrl, { method: 'POST', body: body, headers: reqHeaders });
+                            } catch (e2) {}
+                        }
+                        let realUrl = '';
+                        try {
+                            let json = JSON.parse(apiResp);
+                            if (json.code == 200 && json.url && json.aes_key && json.aes_iv) {
+                                let aesKey = CryptoJS.enc.Utf8.parse(wbbbDeplay(u, json.aes_key));
+                                let aesIv = CryptoJS.enc.Utf8.parse(wbbbDeplay(u, json.aes_iv));
+                                realUrl = CryptoJS.AES.decrypt(json.url, aesKey, { iv: aesIv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }).toString(CryptoJS.enc.Utf8);
+                            }
+                        } catch (e) {}
+                        VOD.vod_content = '【调试：解析结果】' + (realUrl || ('API失败:' + String(apiResp).slice(0,100))) + '\\n' + VOD.vod_content;
+                    }
+                } else {
+                    VOD.vod_content = '【调试：未找到player】' + '\\n' + VOD.vod_content;
+                }
+            }
+        } catch (e) {
+            VOD.vod_content = '【调试：解析异常】' + String(e.message || e) + '\\n' + VOD.vod_content;
+        }
     `,
     搜索: `js:
         let d = [];
