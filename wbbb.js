@@ -20,7 +20,7 @@ var rule = {
     class_name: '电影&剧集&动漫&综艺',
     class_url: '1&2&3&4',
     play_parse: true,
-    sniffer: 0,
+    sniffer: 1,
     isVideo: 'http((?!http).){26,}\.(m3u8|mp4|flv|avi|mkv|wmv|mpg|mpeg|mov|ts|3gp)',
     lazy: `js:
         function wbbbBtoa(s) { try { return btoa(s); } catch (e) { return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Latin1.parse(s)); } }
