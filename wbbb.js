@@ -49,7 +49,7 @@ var rule = {
         function wbbbDeplay(u, b64) { return wbbbAesplay(wbbbCalculate(u), wbbbAtob(b64)); }
 
         let playHtml = request(input, { headers: rule.headers });
-        let m = playHtml.match(/var player_aaaa=(\{[\\s\\S]*?\});/);
+        let m = playHtml.match(/var player_aaaa=(\{[\\s\\S]*?\})(?:;|<\\/script>)/);
         if (!m || !m[1]) {
             input = { jx: 0, parse: 1, url: input, header: rule.headers };
         } else {
@@ -64,42 +64,44 @@ var rule = {
             } else {
                 let playerHost = 'xn--qvr2v.850088.xyz';
                 let u = encUrl.replace(/^http:\/\//, 'https://');
-                u += '&next=//wbbb1.com' + linkNext;
-                if (vodName) u += '&title=' + vodName;
+                u += '&next=//' + (linkNext ? 'wbbb1.com' + linkNext : '');
                 let time = Math.floor(Date.now() / 1000);
                 let key = wbbbEnplay(u, wbbbCalculatee(u + 'stray'));
                 let vkey = wbbbEnplay(u, time + wbbbCalculatee(wbbbCalculate(u) + 'stray'));
                 let ckey = wbbbEnplay(u, wbbbCalculatee(playerHost + 'stray'));
                 let body = 'url=' + encodeURIComponent(u) + '&key=' + encodeURIComponent(key) + '&vkey=' + encodeURIComponent(vkey) + '&ckey=' + encodeURIComponent(ckey);
-                let apiResp = request('https://' + playerHost + '/player/api.php', {
-                    method: 'POST',
-                    body: body,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'User-Agent': rule.headers['User-Agent'],
-                        'Referer': 'https://' + playerHost + '/player/?url=' + encodeURIComponent(encUrl) + '&next=//wbbb1.com' + linkNext + '&title=' + encodeURIComponent(vodName)
-                    }
-                });
+                let apiUrl = 'https://' + playerHost + '/player/api.php';
+                let reqHeaders = {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'User-Agent': rule.headers['User-Agent'],
+                    'Referer': 'https://' + playerHost + '/player/?url=' + encodeURIComponent(encUrl) + '&next=//' + (linkNext ? 'wbbb1.com' + linkNext : '') + '&title=' + encodeURIComponent(vodName)
+                };
+                let apiResp = '';
+                try {
+                    apiResp = request(apiUrl, { method: 'POST', data: body, headers: reqHeaders });
+                } catch (e1) {}
+                if (!apiResp || apiResp.trim().indexOf('{') !== 0) {
+                    try {
+                        apiResp = request(apiUrl, { method: 'POST', body: body, headers: reqHeaders });
+                    } catch (e2) {}
+                }
+                let realUrl = '';
                 try {
                     let json = JSON.parse(apiResp);
                     if (json.code == 200 && json.url && json.aes_key && json.aes_iv) {
-                        let aesKey = CryptoJS.enc.Base64.parse(wbbbDeplay(u, json.aes_key));
-                        let aesIv = CryptoJS.enc.Base64.parse(wbbbDeplay(u, json.aes_iv));
-                        let realUrl = CryptoJS.AES.decrypt(json.url, aesKey, {
+                        let aesKey = CryptoJS.enc.Utf8.parse(wbbbDeplay(u, json.aes_key));
+                        let aesIv = CryptoJS.enc.Utf8.parse(wbbbDeplay(u, json.aes_iv));
+                        realUrl = CryptoJS.AES.decrypt(json.url, aesKey, {
                             iv: aesIv,
                             mode: CryptoJS.mode.CBC,
                             padding: CryptoJS.pad.Pkcs7
                         }).toString(CryptoJS.enc.Utf8);
-                        if (realUrl && realUrl.indexOf('http') === 0) {
-                            input = { parse: 0, url: realUrl, header: { 'User-Agent': json['user-agent'] || rule.headers['User-Agent'], 'Referer': 'https://' + playerHost + '/player/' } };
-                        } else {
-                            input = { jx: 0, parse: 1, url: 'https://' + playerHost + '/player/?url=' + encodeURIComponent(encUrl) + '&next=//wbbb1.com' + linkNext + '&title=' + encodeURIComponent(vodName), header: rule.headers };
-                        }
-                    } else {
-                        input = { jx: 0, parse: 1, url: 'https://' + playerHost + '/player/?url=' + encodeURIComponent(encUrl) + '&next=//wbbb1.com' + linkNext + '&title=' + encodeURIComponent(vodName), header: rule.headers };
                     }
-                } catch (e) {
-                    input = { jx: 0, parse: 1, url: 'https://' + playerHost + '/player/?url=' + encodeURIComponent(encUrl) + '&next=//wbbb1.com' + linkNext + '&title=' + encodeURIComponent(vodName), header: rule.headers };
+                } catch (e) {}
+                if (realUrl && realUrl.indexOf('http') === 0) {
+                    input = { parse: 0, url: realUrl, header: { 'User-Agent': rule.headers['User-Agent'], 'Referer': 'https://' + playerHost + '/player/' } };
+                } else {
+                    input = { jx: 0, parse: 1, url: 'https://' + playerHost + '/player/?url=' + encodeURIComponent(encUrl) + '&next=//' + (linkNext ? 'wbbb1.com' + linkNext : '') + '&title=' + encodeURIComponent(vodName), header: rule.headers };
                 }
             }
         }
