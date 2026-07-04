@@ -9,8 +9,8 @@ var rule = {
     },
     编码: 'utf-8',
     timeout: 10000,
-    homeUrl: '/vod/type/id/1.html',
-    url: '/vod/type/id/fyclass.html',
+    homeUrl: '/vod/type/id/1/page/1.html',
+    url: '/vod/type/id/fyclass/page/fypage.html',
     searchUrl: '/vod/search/wd/***.html',
     searchable: 2,
     quickSearch: 1,
@@ -69,11 +69,6 @@ var rule = {
         let d = [];
         try {
             let url = input;
-            let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
-            let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
-            if (page > 1) {
-                url = rule.host + '/vod/type/id/' + cate + '/page/' + page + '.html';
-            }
             let html = request(url);
             if (!html || html.length < 100) {
                 d.push({ title: '请求失败', desc: '返回内容为空', url: 'http://localhost' });
@@ -101,11 +96,6 @@ var rule = {
         let d = [];
         try {
             let url = input;
-            let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
-            let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
-            if (page > 1) {
-                url = rule.host + '/vod/type/id/' + cate + '/page/' + page + '.html';
-            }
             let html = request(url);
             if (!html || html.length < 100) {
                 d.push({ title: '请求失败', desc: '返回内容为空', url: 'http://localhost' });
