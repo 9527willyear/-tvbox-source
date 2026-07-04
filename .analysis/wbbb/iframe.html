@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>一款优秀的 HTML5 播放器</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    
+    <link rel="stylesheet" href="artplayer/css/artplayer.css">
+    <script src="https://registry.npmmirror.com/jquery/4.0.0/files/dist/jquery.min.js"></script>
+    <script src="artplayer/js/animation.js"></script>
+    <script src="https://registry.npmmirror.com/artplayer/5.4.0/files/dist/artplayer.js"></script>
+    <script src="https://registry.npmmirror.com/lottie-web/5.13.0/files/build/player/lottie.min.js"></script>
+    <script src="artplayer/js/artplayer-danmuku.js"></script>
+    <script src="https://registry.npmmirror.com/crypto-js/4.2.0/files/crypto-js.js"></script>
+    <script src="artplayer/js/danmaya.js"></script>
+    
+</head>
+<body>
+
+    <div id="start"></div>
+    <div id="loading">
+        <div class="mov"></div>
+        <br><br>正在解析视频地址，请稍候...
+    </div>
+    <div id="a1"></div>
+
+    <script type="text/javascript">
+    let hasAutoPlayed = false;   // 新增：标记是否已经自动播放过
+
+    document.getElementById('start').addEventListener('click', function() {
+        this.style.display = 'none';
+        document.getElementById('loading').style.display = 'flex';
+
+        setTimeout(() => {
+            if (typeof stray !== 'undefined' && typeof stray.start === 'function') {
+                stray.start();
+
+                // 只尝试自动播放一次
+                const autoPlayOnce = setInterval(() => {
+                    if (hasAutoPlayed) {
+                        clearInterval(autoPlayOnce);
+                        return;
+                    }
+
+                    if (stray.ad) {
+                        stray.ad.muted = false;
+                        stray.ad.play().then(() => {
+                            hasAutoPlayed = true;        // 成功播放后标记
+                            clearInterval(autoPlayOnce);
+                        }).catch(() => {});
+                    }
+
+                    // 同时尝试 video 标签
+                    const video = document.querySelector('video');
+                    if (video) {
+                        video.muted = false;
+                        video.play().then(() => {
+                            hasAutoPlayed = true;
+                            clearInterval(autoPlayOnce);
+                        }).catch(() => {});
+                    }
+                }, 400);
+            }
+        }, 150);
+    });
+
+    window.artPlayerContainer = 'a1';
+    </script>
+</body>
+</html>
+

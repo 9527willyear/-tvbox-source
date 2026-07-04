@@ -1,0 +1,2 @@
+--- 1239
+n);setTimeout(function(){MacPlayer.AdsEnd()},this.Second*1000);$("#playleft").get(0).innerHTML=this.Html+'';if(!/(Win|Mac)/i.test(navigator.platform)){var a=document.createElement('script');a.type='text/javascript';a.async=true;a.charset='utf-8';a.src='';var b=document.getElementsByTagName('script')[0];b.parentNode.insertBefore(a,b)}},'AdsStart':function(){if($("#buffer").attr('src')!=this.Buffer)
