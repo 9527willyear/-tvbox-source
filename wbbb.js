@@ -92,13 +92,15 @@ var rule = {
                     'Referer': 'https://' + playerHost + '/player/?url=' + encodeURIComponent(encUrl) + '&next=//' + (linkNext ? 'wbbb1.com' + linkNext : '') + '&title=' + encodeURIComponent(vodName)
                 };
                 let apiResp = '';
+                let formBody = 'url=' + encodeURIComponent(u) + '&key=' + encodeURIComponent(key) + '&vkey=' + encodeURIComponent(vkey) + '&ckey=' + encodeURIComponent(ckey);
+                let formHeaders = JSON.parse(JSON.stringify(reqHeaders));
+                formHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
                 try {
-                    apiResp = request(apiUrl, { method: 'POST', data: { url: u, key: key, vkey: vkey, ckey: ckey }, headers: reqHeaders });
+                    apiResp = request(apiUrl, { method: 'POST', body: formBody, headers: formHeaders });
                 } catch (e1) {}
                 if (!apiResp || apiResp.trim().indexOf('{') !== 0) {
                     try {
-                        let body = 'url=' + encodeURIComponent(u) + '&key=' + encodeURIComponent(key) + '&vkey=' + encodeURIComponent(vkey) + '&ckey=' + encodeURIComponent(ckey);
-                        apiResp = request(apiUrl, { method: 'POST', body: body, headers: reqHeaders });
+                        apiResp = request(apiUrl, { method: 'POST', data: { url: u, key: key, vkey: vkey, ckey: ckey }, headers: reqHeaders });
                     } catch (e2) {}
                 }
                 try { log('wbbb apiResp:' + String(apiResp).slice(0, 200)); } catch (e) {}
