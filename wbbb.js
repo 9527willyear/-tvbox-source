@@ -213,6 +213,7 @@ var rule = {
         function wbbbEnplay(u, plain) { return wbbbBtoa(wbbbAesplay(wbbbCalculate(u), plain)); }
         function wbbbDeplay(u, b64) { return wbbbAesplay(wbbbCalculate(u), wbbbAtob(b64)); }
 
+        try {
         let html = request(input, { headers: rule.headers });
         VOD = {};
         VOD.vod_id = input;
@@ -303,6 +304,17 @@ var rule = {
             }
         } catch (e) {
             VOD.vod_content = '【调试：解析异常】' + String(e.message || e) + '\\n' + VOD.vod_content;
+        }
+        } catch (e) {
+            VOD = {
+                vod_id: input,
+                vod_name: '请求出错',
+                vod_pic: '',
+                vod_remarks: '',
+                vod_content: '【调试：二级主流程异常】' + String(e.message || e) + ' | input=' + input,
+                vod_play_from: '默认',
+                vod_play_url: '第1集$' + input
+            };
         }
     `,
     搜索: `js:
