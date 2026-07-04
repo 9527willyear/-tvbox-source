@@ -93,14 +93,12 @@ var rule = {
                 };
                 let apiResp = '';
                 let formBody = 'url=' + encodeURIComponent(u) + '&key=' + encodeURIComponent(key) + '&vkey=' + encodeURIComponent(vkey) + '&ckey=' + encodeURIComponent(ckey);
-                let formHeaders = JSON.parse(JSON.stringify(reqHeaders));
-                formHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
                 try {
-                    apiResp = request(apiUrl, { method: 'POST', body: formBody, headers: formHeaders });
+                    apiResp = request(apiUrl, { method: 'POST', data: formBody, headers: reqHeaders });
                 } catch (e1) {}
                 if (!apiResp || apiResp.trim().indexOf('{') !== 0) {
                     try {
-                        apiResp = request(apiUrl, { method: 'POST', data: { url: u, key: key, vkey: vkey, ckey: ckey }, headers: reqHeaders });
+                        apiResp = request(apiUrl, { method: 'POST', body: formBody, headers: reqHeaders });
                     } catch (e2) {}
                 }
                 try { log('wbbb apiResp:' + String(apiResp).slice(0, 200)); } catch (e) {}
