@@ -213,7 +213,7 @@ var rule = {
         function wbbbEnplay(u, plain) { return wbbbBtoa(wbbbAesplay(wbbbCalculate(u), plain)); }
         function wbbbDeplay(u, b64) { return wbbbAesplay(wbbbCalculate(u), wbbbAtob(b64)); }
 
-        let html = request(input);
+        let html = request(input, { headers: rule.headers });
         VOD = {};
         VOD.vod_id = input;
         VOD.vod_name = pdfh(html, 'h1&&Text') || pdfh(html, '.module-info-heading h1&&Text');
