@@ -3,7 +3,7 @@ var rule = {
     host: 'https://gitee.com',
     编码: 'utf-8',
     timeout: 10000,
-    homeUrl: '/willyear/tvbox-source/raw/master/laodedy_static.json',
+    homeUrl: '/willyear/tvbox-source/raw/master/laodedy_data.txt',
     url: '',
     searchUrl: '',
     searchable: 2,
