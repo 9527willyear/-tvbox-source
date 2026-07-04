@@ -74,13 +74,8 @@ var rule = {
             return pic;
         }
         try {
-            let url = input || '';
             let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
             let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
-            let pm = url.match(/\/page\/(\d+)\.html/);
-            if (pm) page = parseInt(pm[1]);
-            let cm = url.match(/\/type\/id\/(\d+)/);
-            if (cm) cate = cm[1];
             let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=10';
             let html = request(apiUrl);
             let json = JSON.parse(html);
@@ -89,12 +84,12 @@ var rule = {
                     d.push({
                         title: item.vod_name,
                         pic_url: fixPic(item.vod_pic),
-                        desc: item.vod_remarks || item.vod_class || '',
+                        desc: '[P' + page + '] ' + (item.vod_remarks || item.vod_class || ''),
                         url: rule.host + '/vod/detail/id/' + item.vod_id + '.html'
                     });
                 });
             } else {
-                d.push({ title: '暂无数据', desc: 'API返回为空', url: 'http://localhost' });
+                d.push({ title: '暂无数据', desc: 'API返回为空 P=' + page + ' C=' + cate, url: 'http://localhost' });
             }
         } catch (e) {
             d.push({ title: '发生错误', desc: String(e.message || e), url: 'http://localhost' });
@@ -110,13 +105,8 @@ var rule = {
             return pic;
         }
         try {
-            let url = input || '';
             let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
             let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
-            let pm = url.match(/\/page\/(\d+)\.html/);
-            if (pm) page = parseInt(pm[1]);
-            let cm = url.match(/\/type\/id\/(\d+)/);
-            if (cm) cate = cm[1];
             let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=10';
             let html = request(apiUrl);
             let json = JSON.parse(html);
@@ -125,12 +115,12 @@ var rule = {
                     d.push({
                         title: item.vod_name,
                         pic_url: fixPic(item.vod_pic),
-                        desc: item.vod_remarks || item.vod_class || '',
+                        desc: '[P' + page + '] ' + (item.vod_remarks || item.vod_class || ''),
                         url: rule.host + '/vod/detail/id/' + item.vod_id + '.html'
                     });
                 });
             } else {
-                d.push({ title: '暂无数据', desc: 'API返回为空', url: 'http://localhost' });
+                d.push({ title: '暂无数据', desc: 'API返回为空 P=' + page + ' C=' + cate, url: 'http://localhost' });
             }
         } catch (e) {
             d.push({ title: '发生错误', desc: String(e.message || e), url: 'http://localhost' });
