@@ -68,29 +68,22 @@ var rule = {
     推荐: `js:
         let d = [];
         try {
-            let url = input;
             let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
             let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
-            if (page > 1) {
-                url = rule.host + '/vod/type/id/' + cate + '/page/' + page + '.html';
-            }
-            let html = request(url);
-            if (!html || html.length < 100) {
-                d.push({ title: '请求失败', desc: '返回内容为空', url: 'http://localhost' });
-            } else {
-                let items = pdfa(html, '.module-items .module-poster-item');
-                if (!items || items.length === 0) {
-                    d.push({ title: '解析失败', desc: '未找到影片条目', url: 'http://localhost' });
-                } else {
-                    items.forEach(it => {
-                        let title = pdfh(it, '.module-poster-item-title&&Text') || pdfh(it, 'a&&title');
-                        if (!title) return;
-                        let pic = pd(it, '.module-item-pic img&&data-original', url);
-                        let detailUrl = pd(it, 'a&&href', url);
-                        let desc = pdfh(it, '.module-item-note&&Text');
-                        d.push({ title: title, pic_url: pic, desc: desc, url: detailUrl });
+            let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=24';
+            let html = request(apiUrl);
+            let json = JSON.parse(html);
+            if (json.code == 1 && json.list && json.list.length > 0) {
+                json.list.forEach(item => {
+                    d.push({
+                        title: item.vod_name,
+                        pic_url: item.vod_pic,
+                        desc: item.vod_remarks || item.vod_class || '',
+                        url: rule.host + '/vod/detail/id/' + item.vod_id + '.html'
                     });
-                }
+                });
+            } else {
+                d.push({ title: '暂无数据', desc: 'API返回为空', url: 'http://localhost' });
             }
         } catch (e) {
             d.push({ title: '发生错误', desc: String(e.message || e), url: 'http://localhost' });
@@ -100,24 +93,22 @@ var rule = {
     一级: `js:
         let d = [];
         try {
-            let url = input;
-            let html = request(url);
-            if (!html || html.length < 100) {
-                d.push({ title: '请求失败', desc: '返回内容为空', url: 'http://localhost' });
-            } else {
-                let items = pdfa(html, '.module-items .module-poster-item');
-                if (!items || items.length === 0) {
-                    d.push({ title: '解析失败', desc: '未找到影片条目', url: 'http://localhost' });
-                } else {
-                    items.forEach(it => {
-                        let title = pdfh(it, '.module-poster-item-title&&Text') || pdfh(it, 'a&&title');
-                        if (!title) return;
-                        let pic = pd(it, '.module-item-pic img&&data-original', url);
-                        let detailUrl = pd(it, 'a&&href', url);
-                        let desc = pdfh(it, '.module-item-note&&Text');
-                        d.push({ title: title, pic_url: pic, desc: desc, url: detailUrl });
+            let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
+            let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
+            let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=24';
+            let html = request(apiUrl);
+            let json = JSON.parse(html);
+            if (json.code == 1 && json.list && json.list.length > 0) {
+                json.list.forEach(item => {
+                    d.push({
+                        title: item.vod_name,
+                        pic_url: item.vod_pic,
+                        desc: item.vod_remarks || item.vod_class || '',
+                        url: rule.host + '/vod/detail/id/' + item.vod_id + '.html'
                     });
-                }
+                });
+            } else {
+                d.push({ title: '暂无数据', desc: 'API返回为空', url: 'http://localhost' });
             }
         } catch (e) {
             d.push({ title: '发生错误', desc: String(e.message || e), url: 'http://localhost' });
