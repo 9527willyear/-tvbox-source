@@ -74,8 +74,13 @@ var rule = {
             return pic;
         }
         try {
+            let url = input || '';
             let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
             let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
+            let pm = url.match(/\/page\/(\d+)\.html/);
+            if (pm) page = parseInt(pm[1]);
+            let cm = url.match(/\/type\/id\/(\d+)/);
+            if (cm) cate = cm[1];
             let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=10';
             let html = request(apiUrl);
             let json = JSON.parse(html);
@@ -105,8 +110,13 @@ var rule = {
             return pic;
         }
         try {
+            let url = input || '';
             let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
             let cate = typeof MY_CATE !== 'undefined' ? MY_CATE : '1';
+            let pm = url.match(/\/page\/(\d+)\.html/);
+            if (pm) page = parseInt(pm[1]);
+            let cm = url.match(/\/type\/id\/(\d+)/);
+            if (cm) cate = cm[1];
             let apiUrl = rule.host + '/index.php/ajax/data?mid=1&tid=' + cate + '&page=' + page + '&limit=10';
             let html = request(apiUrl);
             let json = JSON.parse(html);
