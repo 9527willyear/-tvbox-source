@@ -1,6 +1,6 @@
 var rule = {
     title: '老的电影网',
-    host: 'https://www.laodedy.com',
+    host: 'http://www.laodedy.com',
     编码: 'utf-8',
     timeout: 10000,
     homeUrl: '/category/dianying.html',
