@@ -48,7 +48,7 @@ var rule = {
         function wbbbEnplay(u, plain) { return wbbbBtoa(wbbbAesplay(wbbbCalculate(u), plain)); }
         function wbbbDeplay(u, b64) { return wbbbAesplay(wbbbCalculate(u), wbbbAtob(b64)); }
 
-        let playHtml = request(input, { headers: rule.headers });
+        let playHtml = request(input);
         let playerJson = '';
         try {
             let idx = playHtml.indexOf('var player_aaaa=');
