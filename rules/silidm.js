@@ -27,6 +27,7 @@ var rule = {
         try {
             let playHtml = request(input);
             if (playHtml) {
+                // 优先解析 player_aaaa
                 let idx = playHtml.indexOf('var player_aaaa=');
                 if (idx >= 0) {
                     let start = idx + 'var player_aaaa='.length;
@@ -43,14 +44,19 @@ var rule = {
                         if (player && player.url) realUrl = player.url;
                     }
                 }
+                // 备用正则提取 m3u8/mp4
                 if (!realUrl) {
-                    let m = playHtml.match(/https?:\/\/[^\"'\s]+\.(m3u8|mp4)/i);
+                    let m = playHtml.match(/https?:\/\/[^\"'\s]+\.(m3u8|mp4|flv)/i);
                     if (m) realUrl = m[0];
+                }
+                // 如果拿到的是相对路径，补全
+                if (realUrl && realUrl.startsWith('/')) {
+                    realUrl = rule.host + realUrl;
                 }
             }
         } catch (e) {}
         if (realUrl && /^https?:\/\//i.test(realUrl)) {
-            input = { parse: 0, url: realUrl, header: { 'User-Agent': rule.headers['User-Agent'], 'Referer': rule.host + '/' } };
+            input = { parse: 0, url: realUrl, header: { 'User-Agent': rule.headers['User-Agent'], 'Referer': rule.host + '/', 'Origin': rule.host } };
         } else {
             input = { parse: 1, url: input };
         }
@@ -102,18 +108,22 @@ var rule = {
         setResult(d);
     `,
     二级: `js:
-        let html = request(input);
+        let detailUrl = input;
+        // 容错：万一进入的是播放页，先跳转到详情页
+        let pm = input.match(/\/play\/(\d+)-\d+-\d+\.html/);
+        if (pm) detailUrl = rule.host + '/video/' + pm[1] + '.html';
+        let html = request(detailUrl);
         VOD = {};
-        VOD.vod_id = input;
+        VOD.vod_id = detailUrl;
         VOD.vod_name = pdfh(html, 'h1.page-title&&Text') || pdfh(html, 'h1&&Text') || '';
-        VOD.vod_pic = pd(html, '.module-item-pic img&&data-src', input) || '';
+        VOD.vod_pic = pd(html, '.module-item-pic img&&data-src', detailUrl) || '';
         VOD.type_name = pdfh(html, '.video-info-aux .video-tag-icon&&Text') || '';
         VOD.vod_area = pdfh(html, '.video-info-aux a&&Text') || '';
         VOD.vod_year = pdfh(html, '.video-info-items:contains(上映) .video-info-item&&Text') || '';
         VOD.vod_remarks = pdfh(html, '.video-info-items:contains(备注) .video-info-item&&Text') || '';
         VOD.vod_director = pdfh(html, '.video-info-items:contains(导演) .video-info-actor&&Text') || '';
         VOD.vod_actor = pdfh(html, '.video-info-items:contains(主演) .video-info-actor&&Text') || '';
-        VOD.vod_content = pdfh(html, '.video-info-items:contains(剧情) .video-info-content&&Text') || '';
+        VOD.vod_content = pdfh(html, '.video-info-items:contains(剧情) .video-info-content&&Text') || pdfh(html, '.video-info-items:contains(剧情) .video-info-item&&Text') || '';
 
         let tabs = pdfa(html, '.play-source-tab').map(it => pdfh(it, '&&Text'));
         let contents = pdfa(html, '.play-source-content');
@@ -124,7 +134,7 @@ var rule = {
             if (tabName.indexOf('网盘') >= 0) return;
             let episodes = pdfa(content, 'a').map(a => {
                 let name = pdfh(a, 'a&&Text');
-                let url = pd(a, 'a&&href', input);
+                let url = pd(a, 'a&&href', detailUrl);
                 return name + '$' + url;
             }).filter(x => x && x.indexOf('$') > 0 && x.split('$')[0]);
             if (episodes.length > 0) {
@@ -141,10 +151,15 @@ var rule = {
             let html = request(input);
             let items = pdfa(html, '.module-search-item');
             items.forEach(it => {
-                let title = pdfh(it, '.video-info-header h3 a&&Text') || pdfh(it, 'h3&&Text');
+                let title = pdfh(it, '.video-info-header h3 a&&Text') || pdfh(it, 'h3&&Text') || pdfh(it, '.video-info-header a&&Text');
                 if (!title) return;
                 let pic = pd(it, '.module-item-pic img&&data-src', input);
-                let url = pd(it, '.video-info-header h3 a&&href', input);
+                let url = pd(it, '.video-info-header h3 a&&href', input) || pd(it, '.video-info-header a&&href', input) || pd(it, '.module-item-pic a&&href', input);
+                // 搜索结果偶有 /play/xxx-x-x.html，统一转成详情页 /video/xxx.html
+                if (url) {
+                    let m = url.match(/\/play\/(\d+)-\d+-\d+\.html/);
+                    if (m) url = rule.host + '/video/' + m[1] + '.html';
+                }
                 let desc = pdfh(it, '.video-serial&&Text') || '';
                 d.push({ title: title, pic_url: pic, desc: desc, url: url });
             });

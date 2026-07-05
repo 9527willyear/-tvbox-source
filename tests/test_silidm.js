@@ -84,8 +84,9 @@ function request(u) {
     console.log('Search items:', sItems.length);
     if (sItems.length > 0) {
       const first = sItems.first();
-      console.log('Title:', first.find('.video-info-header a').text().trim());
-      console.log('URL:', new URL(first.find('.video-info-header a').attr('href'), 'https://silidm.com/').href);
+      console.log('Title (h3):', first.find('.video-info-header h3 a').text().trim());
+      console.log('URL (h3):', new URL(first.find('.video-info-header h3 a').attr('href'), 'https://silidm.com/').href);
+      console.log('Desc (serial):', first.find('.video-serial').text().trim());
     }
   } catch (e) {
     console.error('Error:', e);
