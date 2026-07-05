@@ -154,19 +154,14 @@ var rule = {
         let d = [];
         try {
             let html = request(input);
-            if (!html || html.length < 50) {
-                setResult(d);
-                return;
-            }
             let json = JSON.parse(html);
-            if (json && json.list && json.list.length > 0) {
+            if (json && json.list) {
                 json.list.forEach(item => {
-                    if (!item || !item.id) return;
                     d.push({
-                        title: item.name || '',
-                        pic_url: item.pic || '',
+                        title: item.name,
+                        pic_url: item.pic,
                         desc: '',
-                        url: rule.host + '/video/' + item.id + '.html'
+                        url: '/video/' + item.id + '.html'
                     });
                 });
             }
