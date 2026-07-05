@@ -26,24 +26,30 @@ var rule = {
         let realUrl = '';
         try {
             let playHtml = request(input);
-            let idx = playHtml.indexOf('var player_aaaa=');
-            if (idx >= 0) {
-                let start = idx + 'var player_aaaa='.length;
-                let depth = 0, end = -1;
-                for (let i = start; i < playHtml.length; i++) {
-                    if (playHtml[i] === '{') depth++;
-                    else if (playHtml[i] === '}') {
-                        depth--;
-                        if (depth === 0) { end = i + 1; break; }
+            if (playHtml) {
+                let idx = playHtml.indexOf('var player_aaaa=');
+                if (idx >= 0) {
+                    let start = idx + 'var player_aaaa='.length;
+                    let depth = 0, end = -1;
+                    for (let i = start; i < playHtml.length; i++) {
+                        if (playHtml[i] === '{') depth++;
+                        else if (playHtml[i] === '}') {
+                            depth--;
+                            if (depth === 0) { end = i + 1; break; }
+                        }
+                    }
+                    if (end > start) {
+                        let player = JSON.parse(playHtml.substring(start, end));
+                        if (player && player.url) realUrl = player.url;
                     }
                 }
-                if (end > start) {
-                    let player = JSON.parse(playHtml.substring(start, end));
-                    if (player && player.url) realUrl = player.url;
+                if (!realUrl) {
+                    let m = playHtml.match(/https?:\/\/[^\"'\s]+\.(m3u8|mp4)/i);
+                    if (m) realUrl = m[0];
                 }
             }
         } catch (e) {}
-        if (realUrl && /^https?:\/\//i.test(realUrl)) {
+        if (realUrl && /^https?:\\/\\//i.test(realUrl)) {
             input = { parse: 0, url: realUrl, header: { 'User-Agent': rule.headers['User-Agent'], 'Referer': rule.host + '/' } };
         } else {
             input = { parse: 1, url: input };
@@ -94,9 +100,9 @@ var rule = {
         VOD.vod_director = pdfh(html, '.daoyan&&Text') || '';
         VOD.vod_content = pdfh(html, '.juqing span&&Text') || '';
 
-        let playUrl = pd(html, 'a[href*="/id/"]&&href', input);
+        let playUrl = pd(html, '.play a&&href', input);
         if (!playUrl) {
-            let m = input.match(/\/yh\/(\d+)\.html/);
+            let m = input.match(/\\/yh\\/(\\d+)\\.html/);
             if (m) playUrl = rule.host + '/id/' + m[1] + '-1-1.html';
         }
 
