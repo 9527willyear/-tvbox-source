@@ -107,6 +107,13 @@ var rule = {
         VOD.vod_id = input;
         VOD.vod_name = pdfh(html, 'h1.page-title&&Text') || pdfh(html, 'h1&&Text') || '';
         VOD.vod_pic = pd(html, '.module-item-pic img&&data-src', input) || '';
+        VOD.type_name = pdfh(html, '.video-info-aux .video-tag-icon&&Text') || '';
+        VOD.vod_area = pdfh(html, '.video-info-aux a&&Text') || '';
+        VOD.vod_year = pdfh(html, '.video-info-items:contains(上映) .video-info-item&&Text') || '';
+        VOD.vod_remarks = pdfh(html, '.video-info-items:contains(备注) .video-info-item&&Text') || '';
+        VOD.vod_director = pdfh(html, '.video-info-items:contains(导演) .video-info-actor&&Text') || '';
+        VOD.vod_actor = pdfh(html, '.video-info-items:contains(主演) .video-info-actor&&Text') || '';
+        VOD.vod_content = pdfh(html, '.video-info-items:contains(剧情) .video-info-content&&Text') || '';
 
         let tabs = pdfa(html, '.play-source-tab').map(it => pdfh(it, '&&Text'));
         let contents = pdfa(html, '.play-source-content');
