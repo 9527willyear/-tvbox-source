@@ -74,15 +74,19 @@ var rule = {
     一级: `js:
         let d = [];
         try {
+            let url = input || '';
+            let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
+            let pm = url.match(/\/page\/(\d+)\.html/);
+            if (pm) page = parseInt(pm[1]);
             let html = request(input);
             let items = pdfa(html, '.module-item');
             items.forEach(it => {
                 let title = pdfh(it, '.module-item-title&&Text') || pdfh(it, '.video-name a&&Text');
                 if (!title) return;
                 let pic = pd(it, '.module-item-pic img&&data-src', input);
-                let url = pd(it, '.module-item-title&&href', input) || pd(it, '.module-item-pic a&&href', input);
-                let desc = pdfh(it, '.module-item-text&&Text') || '';
-                d.push({ title: title, pic_url: pic, desc: desc, url: url });
+                let detailUrl = pd(it, '.module-item-title&&href', input) || pd(it, '.module-item-pic a&&href', input);
+                let desc = '[P' + page + '] ' + (pdfh(it, '.module-item-text&&Text') || '');
+                d.push({ title: title, pic_url: pic, desc: desc, url: detailUrl });
             });
         } catch (e) {}
         setResult(d);
