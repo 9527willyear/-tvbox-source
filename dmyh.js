@@ -25,19 +25,20 @@ var rule = {
     lazy: `js:
         let realUrl = '';
         try {
-            let idx = input.indexOf('var player_aaaa=');
+            let playHtml = request(input);
+            let idx = playHtml.indexOf('var player_aaaa=');
             if (idx >= 0) {
                 let start = idx + 'var player_aaaa='.length;
                 let depth = 0, end = -1;
-                for (let i = start; i < input.length; i++) {
-                    if (input[i] === '{') depth++;
-                    else if (input[i] === '}') {
+                for (let i = start; i < playHtml.length; i++) {
+                    if (playHtml[i] === '{') depth++;
+                    else if (playHtml[i] === '}') {
                         depth--;
                         if (depth === 0) { end = i + 1; break; }
                     }
                 }
                 if (end > start) {
-                    let player = JSON.parse(input.substring(start, end));
+                    let player = JSON.parse(playHtml.substring(start, end));
                     if (player && player.url) realUrl = player.url;
                 }
             }
