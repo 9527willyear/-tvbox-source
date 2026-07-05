@@ -11,7 +11,7 @@ var rule = {
     timeout: 10000,
     homeUrl: '/',
     url: '/show/fyclass--------fypage---.html',
-    searchUrl: '/index.php/ajax/suggest?mid=1&wd=**&limit=20',
+    searchUrl: '/index.php/ajax/suggest?mid=1&wd=**&page=fypage&limit=20',
     searchable: 2,
     quickSearch: 1,
     filterable: 0,
