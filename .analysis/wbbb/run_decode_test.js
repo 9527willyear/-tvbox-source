@@ -1,6 +1,6 @@
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
-const s = fs.readFileSync('C:/Users/qwl/tvbox-source/.analysis/wbbb/player/danmaya.js', 'utf8');
+const s = fs.readFileSync('./player/danmaya.js', 'utf8');
 const iframeUrl = 'https://xn--qvr2v.850088.xyz/player/?url=test&title=t';
 const loc = new URL(iframeUrl);
 const captured = [];
@@ -33,5 +33,5 @@ global.btoa = btoa;
 global.atob = atob;
 global.URL = URL;
 global.URLSearchParams = URLSearchParams;
-try { require('C:/Users/qwl/tvbox-source/.analysis/wbbb/player/danmaya.js'); } catch (e) { console.error('ERR', e.message); }
+try { require('./player/danmaya.js'); } catch (e) { console.error('ERR', e.message); }
 console.log('doc accesses:', captured.slice(0, 40));

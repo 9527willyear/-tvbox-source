@@ -131,7 +131,7 @@ global.setInterval = () => 0;
 global.clearInterval = () => {};
 
 try {
-  require('C:/Users/qwl/tvbox-source/.analysis/wbbb/player/danmaya.js');
+  require('./player/danmaya.js');
   console.log('\n--- top-level ok ---');
   console.log('urlValueurl:', global.urlValueurl);
   console.log('keyValue:', global.keyValue);

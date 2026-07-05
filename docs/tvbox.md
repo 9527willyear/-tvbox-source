@@ -3,7 +3,7 @@
 ## 项目位置
 
 ```text
-C:\Users\qwl\tvbox-source\
+D:\kimi work\tvbox-source\
 ```
 
 ## 核心文件
@@ -47,7 +47,7 @@ https://gitee.com/willyear/tvbox-source/raw/master/source.json
 如需重新生成 `tvbox.json`：
 
 ```bash
-cd C:\Users\qwl\tvbox-source
+cd "D:\kimi work\tvbox-source"
 MAX_PAGES=10 node scraper.js
 ```
 

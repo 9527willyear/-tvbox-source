@@ -81,7 +81,7 @@ https://你的用户名.github.io/tvbox-source/source.json
 或者如果你会用 git 命令行，也可以：
 
 ```bash
-cd C:\Users\qwl\tvbox-source
+cd "D:\kimi work\tvbox-source"
 git init
 git remote add origin https://github.com/你的用户名/tvbox-source.git
 git add tvbox.json source.json README.md .gitignore

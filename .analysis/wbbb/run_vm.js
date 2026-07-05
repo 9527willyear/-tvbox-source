@@ -147,7 +147,7 @@ const context = {
   console,
 };
 
-const code = fs.readFileSync('C:/Users/qwl/tvbox-source/.analysis/wbbb/player/danmaya.js', 'utf8') +
+const code = fs.readFileSync('./player/danmaya.js', 'utf8') +
   `; ({ urlValue, urlValueurl, keyValue, vkeyValue, ckeyValue, shouldShowButton, stray })`;
 
 try {

@@ -1,7 +1,7 @@
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const vm = require('vm');
-const code = fs.readFileSync('C:/Users/qwl/tvbox-source/.analysis/wbbb/player/danmaya.js', 'utf8') +
+const code = fs.readFileSync('./player/danmaya.js', 'utf8') +
   `; [_0x3963(0x8cb,"w2LU"),_0x3963(0xc7d,"bAVV"),_0x3963(0x4ad,"0Iy^"),_0x3963(0x22e,"Hnk4"),_0x3963(0xeb8,"yEhv"),_0x3963(0xbc4,"yxt("),_0x3963(0x560,"LcUP"),_0x3963(0x7b3,"4p@R"),_0x3963(0x953,"Hnk4"),_0x3963(0xb13,"w6vC"),_0x3963(0x5a5,"tVMK"),_0x3963(0x5d0,"0Iy^"),_0x3963(0xc17,"jLW!")]`;
 const ctx = {
   window: {

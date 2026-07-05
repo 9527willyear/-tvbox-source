@@ -2,11 +2,12 @@
   "spider": "",
   "sites": [
     {
-      "key": "silidm",
-      "name": "电影先生",
+      "key": "laodedy",
+      "name": "老的电影网",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/silidm.js?t=5"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/archive/laodedy.js?t=6",
+      "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
     }
   ],
   "parses": [],
