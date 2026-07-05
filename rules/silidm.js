@@ -141,11 +141,11 @@ var rule = {
             let html = request(input);
             let items = pdfa(html, '.module-search-item');
             items.forEach(it => {
-                let title = pdfh(it, '.video-info-header a&&Text') || pdfh(it, 'h3&&Text');
+                let title = pdfh(it, '.video-info-header h3 a&&Text') || pdfh(it, 'h3&&Text');
                 if (!title) return;
                 let pic = pd(it, '.module-item-pic img&&data-src', input);
-                let url = pd(it, '.video-info-header a&&href', input);
-                let desc = pdfh(it, '.video-info-item&&Text') || '';
+                let url = pd(it, '.video-info-header h3 a&&href', input);
+                let desc = pdfh(it, '.video-serial&&Text') || '';
                 d.push({ title: title, pic_url: pic, desc: desc, url: url });
             });
         } catch (e) {}
