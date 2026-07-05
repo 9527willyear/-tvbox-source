@@ -11,9 +11,9 @@ var rule = {
     timeout: 10000,
     homeUrl: '/',
     url: '/show/fyclass--------fypage---.html',
-    searchUrl: '/search/**-------------.html',
-    searchable: 1,
-    quickSearch: 0,
+    searchUrl: '/index.php/ajax/suggest?mid=1&wd=**&limit=20',
+    searchable: 2,
+    quickSearch: 1,
     filterable: 0,
     limit: 10,
     double: false,
@@ -154,24 +154,22 @@ var rule = {
         let d = [];
         try {
             let html = request(input);
-            if (!html || html.length < 500) {
+            if (!html || html.length < 50) {
                 setResult(d);
                 return;
             }
-            let items = pdfa(html, '.module-search-item');
-            items.forEach(it => {
-                let title = pdfh(it, '.video-info-header h3 a&&Text') || pdfh(it, 'h3&&Text') || pdfh(it, '.video-info-header a&&Text');
-                if (!title) return;
-                let pic = pd(it, '.module-item-pic img&&data-src', input);
-                let url = pd(it, '.video-info-header h3 a&&href', input) || pd(it, '.video-info-header a&&href', input) || pd(it, '.module-item-pic a&&href', input);
-                // 搜索结果偶有 /play/xxx-x-x.html，统一转成详情页 /video/xxx.html
-                if (url) {
-                    let m = url.match(/\/play\/(\d+)-\d+-\d+\.html/);
-                    if (m) url = rule.host + '/video/' + m[1] + '.html';
-                }
-                let desc = pdfh(it, '.video-serial&&Text') || '';
-                d.push({ title: title, pic_url: pic, desc: desc, url: url });
-            });
+            let json = JSON.parse(html);
+            if (json && json.list && json.list.length > 0) {
+                json.list.forEach(item => {
+                    if (!item || !item.id) return;
+                    d.push({
+                        title: item.name || '',
+                        pic_url: item.pic || '',
+                        desc: '',
+                        url: rule.host + '/video/' + item.id + '.html'
+                    });
+                });
+            }
         } catch (e) {}
         setResult(d);
     `,

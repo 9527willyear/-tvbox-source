@@ -76,17 +76,16 @@ function request(u) {
     const player = JSON.parse(playHtml.substring(start, end));
     console.log('M3U8:', player.url);
 
-    // Test search
-    console.log('\n=== Search ===');
-    const searchHtml = await request('https://silidm.com/search/%E7%81%AB%E5%BD%B1-------------.html');
-    const searchDoc = cheerio.load(searchHtml);
-    const sItems = searchDoc('.module-search-item');
-    console.log('Search items:', sItems.length);
-    if (sItems.length > 0) {
-      const first = sItems.first();
-      console.log('Title (h3):', first.find('.video-info-header h3 a').text().trim());
-      console.log('URL (h3):', new URL(first.find('.video-info-header h3 a').attr('href'), 'https://silidm.com/').href);
-      console.log('Desc (serial):', first.find('.video-serial').text().trim());
+    // Test search API
+    console.log('\n=== Search API ===');
+    const searchHtml = await request('https://silidm.com/index.php/ajax/suggest?mid=1&wd=%E7%81%AB%E5%BD%B1&limit=20');
+    const searchJson = JSON.parse(searchHtml);
+    console.log('Search items:', searchJson.list ? searchJson.list.length : 0);
+    if (searchJson.list && searchJson.list.length > 0) {
+      const first = searchJson.list[0];
+      console.log('Title:', first.name);
+      console.log('URL:', 'https://silidm.com/video/' + first.id + '.html');
+      console.log('Pic:', first.pic);
     }
   } catch (e) {
     console.error('Error:', e);
