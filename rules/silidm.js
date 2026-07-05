@@ -11,7 +11,7 @@ var rule = {
     timeout: 10000,
     homeUrl: '/',
     url: '/show/fyclass--------fypage---.html',
-    searchUrl: '/search/***-------------.html',
+    searchUrl: '/search/**-------------.html',
     searchable: 1,
     quickSearch: 0,
     filterable: 0,
@@ -108,47 +108,56 @@ var rule = {
         setResult(d);
     `,
     二级: `js:
-        let detailUrl = input;
-        // 容错：万一进入的是播放页，先跳转到详情页
-        let pm = input.match(/\/play\/(\d+)-\d+-\d+\.html/);
-        if (pm) detailUrl = rule.host + '/video/' + pm[1] + '.html';
-        let html = request(detailUrl);
-        VOD = {};
-        VOD.vod_id = detailUrl;
-        VOD.vod_name = pdfh(html, 'h1.page-title&&Text') || pdfh(html, 'h1&&Text') || '';
-        VOD.vod_pic = pd(html, '.module-item-pic img&&data-src', detailUrl) || '';
-        VOD.type_name = pdfh(html, '.video-info-aux .video-tag-icon&&Text') || '';
-        VOD.vod_area = pdfh(html, '.video-info-aux a&&Text') || '';
-        VOD.vod_year = pdfh(html, '.video-info-items:contains(上映) .video-info-item&&Text') || '';
-        VOD.vod_remarks = pdfh(html, '.video-info-items:contains(备注) .video-info-item&&Text') || '';
-        VOD.vod_director = pdfh(html, '.video-info-items:contains(导演) .video-info-actor&&Text') || '';
-        VOD.vod_actor = pdfh(html, '.video-info-items:contains(主演) .video-info-actor&&Text') || '';
-        VOD.vod_content = pdfh(html, '.video-info-items:contains(剧情) .video-info-content&&Text') || pdfh(html, '.video-info-items:contains(剧情) .video-info-item&&Text') || '';
+        try {
+            let html = request(input);
+            VOD = {};
+            VOD.vod_id = input;
+            VOD.vod_name = pdfh(html, 'h1.page-title&&Text') || pdfh(html, 'h1&&Text') || '';
+            VOD.vod_pic = pd(html, '.module-item-pic img&&data-src', input) || '';
+            VOD.type_name = pdfh(html, '.video-info-aux .video-tag-icon&&Text') || '';
+            VOD.vod_area = pdfh(html, '.video-info-aux a&&Text') || '';
 
-        let tabs = pdfa(html, '.play-source-tab').map(it => pdfh(it, '&&Text'));
-        let contents = pdfa(html, '.play-source-content');
-        let froms = [];
-        let lists = [];
-        contents.forEach((content, index) => {
-            let tabName = tabs[index] || ('线路' + (index + 1));
-            if (tabName.indexOf('网盘') >= 0) return;
-            let episodes = pdfa(content, 'a').map(a => {
-                let name = pdfh(a, 'a&&Text');
-                let url = pd(a, 'a&&href', detailUrl);
-                return name + '$' + url;
-            }).filter(x => x && x.indexOf('$') > 0 && x.split('$')[0]);
-            if (episodes.length > 0) {
-                froms.push(tabName);
-                lists.push(episodes.join('#'));
-            }
-        });
-        VOD.vod_play_from = froms.join('$$$');
-        VOD.vod_play_url = lists.join('$$$');
+            // 遍历 info-items 取导演/主演/年份/备注/剧情，不依赖 :contains()
+            pdfa(html, '.video-info-items').forEach(it => {
+                let label = (pdfh(it, '.video-info-itemtitle&&Text') || '').replace(/[:：\s]/g, '');
+                if (label.indexOf('导演') >= 0) VOD.vod_director = pdfh(it, '.video-info-actor&&Text') || pdfh(it, '.video-info-item&&Text') || '';
+                else if (label.indexOf('主演') >= 0) VOD.vod_actor = pdfh(it, '.video-info-actor&&Text') || pdfh(it, '.video-info-item&&Text') || '';
+                else if (label.indexOf('上映') >= 0 || label.indexOf('年份') >= 0) VOD.vod_year = pdfh(it, '.video-info-item&&Text') || '';
+                else if (label.indexOf('备注') >= 0) VOD.vod_remarks = pdfh(it, '.video-info-item&&Text') || '';
+                else if (label.indexOf('剧情') >= 0) VOD.vod_content = pdfh(it, '.video-info-content&&Text') || pdfh(it, '.video-info-item&&Text') || '';
+            });
+
+            let tabs = pdfa(html, '.play-source-tab').map(it => pdfh(it, '&&Text'));
+            let contents = pdfa(html, '.play-source-content');
+            let froms = [];
+            let lists = [];
+            contents.forEach((content, index) => {
+                let tabName = tabs[index] || ('线路' + (index + 1));
+                if (tabName.indexOf('网盘') >= 0) return;
+                let episodes = pdfa(content, 'a').map(a => {
+                    let name = pdfh(a, 'a&&Text');
+                    let url = pd(a, 'a&&href', input);
+                    return name + '$' + url;
+                }).filter(x => x && x.indexOf('$') > 0 && x.split('$')[0]);
+                if (episodes.length > 0) {
+                    froms.push(tabName);
+                    lists.push(episodes.join('#'));
+                }
+            });
+            VOD.vod_play_from = froms.join('$$$');
+            VOD.vod_play_url = lists.join('$$$');
+        } catch (e) {
+            VOD = { vod_id: input, vod_name: '解析出错', vod_content: String(e.message || e) };
+        }
     `,
     搜索: `js:
         let d = [];
         try {
             let html = request(input);
+            if (!html || html.length < 500) {
+                setResult(d);
+                return;
+            }
             let items = pdfa(html, '.module-search-item');
             items.forEach(it => {
                 let title = pdfh(it, '.video-info-header h3 a&&Text') || pdfh(it, 'h3&&Text') || pdfh(it, '.video-info-header a&&Text');
