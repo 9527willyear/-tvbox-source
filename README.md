@@ -48,24 +48,24 @@
 多站合并源（一个地址包含多个网站）：
 
 ```text
-https://gitee.com/willyear/tvbox-source/raw/master/sources/source_merged.json
+https://gitee.com/willyear/tvbox-source/raw/master/source_merged.json
 ```
 
 ## 单站源
 
 | 网站 | 导入地址 |
 |------|----------|
-| 稀饭动漫 | `https://gitee.com/willyear/tvbox-source/raw/master/sources/source_xifan.json` |
-| 4K 影视 | `https://gitee.com/willyear/tvbox-source/raw/master/sources/source_4kvm.json` |
-| 剧 OK | `https://gitee.com/willyear/tvbox-source/raw/master/sources/source_juok.json` |
-| 西瓜影院 | `https://gitee.com/willyear/tvbox-source/raw/master/sources/source_xigua.json` |
-| 樱花动漫 | `https://gitee.com/willyear/tvbox-source/raw/master/sources/source_dmyh.json` |
-| 电影先生 | `https://gitee.com/willyear/tvbox-source/raw/master/sources/source_silidm.json` |
-| 91 追剧 | `https://gitee.com/willyear/tvbox-source/raw/master/sources/source_91zhuiju.json` |
-| Omofun | `https://gitee.com/willyear/tvbox-source/raw/master/sources/source_omofuna.json` |
+| 稀饭动漫 | `https://gitee.com/willyear/tvbox-source/raw/master/source_xifan.json` |
+| 4K 影视 | `https://gitee.com/willyear/tvbox-source/raw/master/source_4kvm.json` |
+| 剧 OK | `https://gitee.com/willyear/tvbox-source/raw/master/source_juok.json` |
+| 西瓜影院 | `https://gitee.com/willyear/tvbox-source/raw/master/source_xigua.json` |
+| 樱花动漫 | `https://gitee.com/willyear/tvbox-source/raw/master/source_dmyh.json` |
+| 电影先生 | `https://gitee.com/willyear/tvbox-source/raw/master/source_silidm.json` |
+| 91 追剧 | `https://gitee.com/willyear/tvbox-source/raw/master/source_91zhuiju.json` |
+| Omofun | `https://gitee.com/willyear/tvbox-source/raw/master/source_omofuna.json` |
 
 ## 上传说明
 
-1. 修改 `rules/` 里的 JS 规则文件。
-2. 把修改后的 JS 文件和对应的 `sources/` 里的 JSON 文件一起上传到 Gitee 仓库的对应文件夹。
+1. 本地修改 `rules/` 里的 JS 规则文件。
+2. 把修改后的 JS 文件和对应的 `sources/` 里的 JSON 文件一起上传到 **Gitee 仓库根目录**（和之前一样，不要传文件夹）。
 3. 在 TVbox 里用上面的地址导入或重新加载源。

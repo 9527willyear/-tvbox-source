@@ -6,7 +6,7 @@
       "name": "Omofun动漫",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/rules/omofuna.js"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/omofuna.js"
     }
   ],
   "parses": [],

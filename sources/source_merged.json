@@ -6,28 +6,28 @@
       "name": "稀饭动漫",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/rules/xifan.js"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/xifan.js"
     },
     {
       "key": "4kvm",
       "name": "4K影视",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/rules/4kvm.js"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/4kvm.js"
     },
     {
       "key": "juok",
       "name": "剧OK",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/rules/juok.js"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/juok.js"
     },
     {
       "key": "xigua",
       "name": "西瓜影院",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/rules/xigua.js"
+      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/xigua.js"
     }
   ],
   "parses": [],
