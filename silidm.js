@@ -74,21 +74,27 @@ var rule = {
     一级: `js:
         let d = [];
         try {
-            let url = input || '';
-            let page = typeof MY_PAGE !== 'undefined' ? parseInt(MY_PAGE) : 1;
-            let pm = url.match(/\/page\/(\d+)\.html/);
-            if (pm) page = parseInt(pm[1]);
             let html = request(input);
-            let items = pdfa(html, '.module-item');
-            items.forEach(it => {
-                let title = pdfh(it, '.module-item-title&&Text') || pdfh(it, '.video-name a&&Text');
-                if (!title) return;
-                let pic = pd(it, '.module-item-pic img&&data-src', input);
-                let detailUrl = pd(it, '.module-item-title&&href', input) || pd(it, '.module-item-pic a&&href', input);
-                let desc = '[P' + page + '] ' + (pdfh(it, '.module-item-text&&Text') || '');
-                d.push({ title: title, pic_url: pic, desc: desc, url: detailUrl });
-            });
-        } catch (e) {}
+            if (!html || html.length < 500) {
+                d.push({ title: '请求失败', desc: '返回为空: ' + input, url: 'http://localhost' });
+            } else {
+                let items = pdfa(html, '.module-item');
+                if (!items || items.length === 0) {
+                    d.push({ title: '解析失败', desc: '未找到影片: ' + input, url: 'http://localhost' });
+                } else {
+                    items.forEach(it => {
+                        let title = pdfh(it, '.module-item-title&&Text') || pdfh(it, '.video-name a&&Text');
+                        if (!title) return;
+                        let pic = pd(it, '.module-item-pic img&&data-src', input);
+                        let detailUrl = pd(it, '.module-item-title&&href', input) || pd(it, '.module-item-pic a&&href', input);
+                        let desc = pdfh(it, '.module-item-text&&Text') || '';
+                        d.push({ title: title, pic_url: pic, desc: desc, url: detailUrl });
+                    });
+                }
+            }
+        } catch (e) {
+            d.push({ title: '发生错误', desc: String(e.message || e) + ': ' + input, url: 'http://localhost' });
+        }
         setResult(d);
     `,
     二级: `js:
