@@ -41,22 +41,14 @@
 │   ├── source_omofuna.json # Omofun 单源
 │   └── source_4k_resources.json # 4K 资源站
 │
-├── archive/                # 已放弃/失效的源
-│   ├── wbbb.*              # 歪比（加密太重，无法解析）
-│   └── laodedy.*           # 老的电影网（不稳定）
-│
 ├── scripts/                # 本地爬虫/生成脚本
 │   └── scraper.js
 │
 ├── tests/                  # 测试脚本
 │   └── test_*.js
 │
-├── data/                   # 静态数据文件
-│   └── tvbox.json
-│
-└── docs/                   # 文档
-    ├── DEPLOY.md
-    └── tvbox.md
+└── data/                   # 静态数据文件
+    └── tvbox.json
 ```
 
 ---

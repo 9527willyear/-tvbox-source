@@ -1,2 +1,0 @@
-MacPlayer.Html = '<iframe border="0" src="https://xn--qvr2v.850088.xyz/player/?url='+MacPlayer.PlayUrl+'&next=//'+ (!MacPlayer.PlayLinkNext?'':document.domain+MacPlayer.PlayLinkNext) +'&title='+document.title.split("-")[0]+'" width="100%" height="100%" allowfullscreen="true" marginWidth="0" frameSpacing="0" marginHeight="0" frameBorder="0" scrolling="no" vspale="0" noResize></iframe>';
-MacPlayer.Show();
