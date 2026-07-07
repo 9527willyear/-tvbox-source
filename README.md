@@ -34,21 +34,4 @@ DELAY=200               # 请求间隔（毫秒）
 OUTPUT=./tvbox.json     # 输出路径
 ```
 
-## 部署到网站
 
-1. 把生成的 `tvbox.json` 上传到你的网站，例如：
-   ```
-   https://next.xifanacg.com/tvbox.json
-   ```
-2. 修改 `source.json` 里的 `api` 地址为上一步的实际地址。
-3. 把 `source.json` 的内容导入 TVbox，或直接把 `source.json` 部署为可访问链接供 TVbox 订阅。
-
-## TVbox 中使用
-
-在 TVbox 配置里填入：
-
-```text
-https://next.xifanacg.com/source.json
-```
-
-或直接把 `source.json` 里的 `sites` 数组内容添加到你现有的 TVbox 配置中。
