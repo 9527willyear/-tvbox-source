@@ -1,0 +1,28 @@
+{
+  "spider": "",
+  "sites": [
+    {
+      "key": "xifan",
+      "name": "稀饭动漫",
+      "type": 3,
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
+      "ext": "https://9527willyear.github.io/-tvbox-source/xifan.js?t=1",
+      "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
+    }
+  ],
+  "parses": [],
+  "flags": [
+    "youku",
+    "qq",
+    "iqiyi",
+    "qiyi",
+    "letv",
+    "sohu",
+    "tudou",
+    "pptv",
+    "mgtv",
+    "bilibili"
+  ],
+  "rules": [],
+  "ads": []
+}

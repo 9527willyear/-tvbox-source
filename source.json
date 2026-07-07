@@ -2,16 +2,50 @@
   "spider": "",
   "sites": [
     {
-      "key": "xifan",
-      "name": "稀饭动漫",
+      "key": "xifan_lz",
+      "name": "稀饭-连载新番",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://cdn.jsdelivr.net/gh/9527willyear/-tvbox-source@main/xifan.js",
+      "ext": "https://9527willyear.github.io/-tvbox-source/xifan_1.js?t=1",
+      "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
+    },
+    {
+      "key": "xifan_wj",
+      "name": "稀饭-完结旧番",
+      "type": 3,
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
+      "ext": "https://9527willyear.github.io/-tvbox-source/xifan_2.js?t=1",
+      "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
+    },
+    {
+      "key": "xifan_jc",
+      "name": "稀饭-剧场版",
+      "type": 3,
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
+      "ext": "https://9527willyear.github.io/-tvbox-source/xifan_3.js?t=1",
+      "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
+    },
+    {
+      "key": "xifan_mm",
+      "name": "稀饭-美漫",
+      "type": 3,
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
+      "ext": "https://9527willyear.github.io/-tvbox-source/xifan_21.js?t=1",
       "jar": "https://img2.gelonghui.com/library/e2693-9aa941a0-f96a-40c2-ac23-e6af358d19a7.png;md5;e2693c58ebc58abecc7282b721db79ca"
     }
   ],
   "parses": [],
-  "flags": ["youku", "qq", "iqiyi", "qiyi", "letv", "sohu", "tudou", "pptv", "mgtv"],
+  "flags": [
+    "youku",
+    "qq",
+    "iqiyi",
+    "qiyi",
+    "letv",
+    "sohu",
+    "tudou",
+    "pptv",
+    "mgtv"
+  ],
   "rules": [],
   "ads": []
 }
