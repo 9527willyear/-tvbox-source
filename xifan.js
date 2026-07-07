@@ -9,16 +9,23 @@ var rule = {
     },
     编码: 'utf-8',
     timeout: 10000,
-    homeUrl: '/type/1.html',
-    url: '/type/fyclass/page/fypage.html',
-    searchUrl: '',
-    searchable: 0,
-    quickSearch: 0,
-    filterable: 0,
-    limit: 16,
+    homeUrl: '/index.php/ajax/data?mid=1&tid=1&page=1&limit=20',
+    url: '/index.php/ajax/data?mid=1&tid=fyfilter&page=fypage&limit=20',
+    searchUrl: '/index.php/ajax/suggest?mid=1&wd=**&page=fypage&limit=20',
+    searchable: 2,
+    quickSearch: 1,
+    filterable: 1,
+    limit: 20,
     double: false,
     class_name: '连载新番&完结旧番&剧场版&美漫',
-    class_url: '1&2&3&21',
+    class_url: '1&2&3&4',
+    filter_url: '{{fl.cateId}}',
+    filter_def: {
+        1: { cateId: '1' },
+        2: { cateId: '2' },
+        3: { cateId: '3' },
+        4: { cateId: '21' }
+    },
     play_parse: true,
     sniffer: 0,
     isVideo: 'http((?!http).){26,}\\.(m3u8|mp4|flv|avi|mkv|wmv|mpg|mpeg|mov|ts|3gp)',
@@ -36,8 +43,38 @@ var rule = {
             input = { jx: 0, parse: 1, url: input };
         }
     `,
-    推荐: 'div.public-list-box;a.public-list-exp&&title;img&&data-src;.public-list-prb&&Text;a.public-list-exp&&href',
-    一级: 'div.public-list-box;a.public-list-exp&&title;img&&data-src;.public-list-prb&&Text;a.public-list-exp&&href',
+    推荐: `js:
+        let html = request(input);
+        let json = JSON.parse(html);
+        let d = [];
+        if (json.list) {
+            json.list.forEach(item => {
+                d.push({
+                    title: item.vod_name,
+                    pic_url: item.vod_pic,
+                    desc: item.vod_remarks || item.vod_class,
+                    url: '/bangumi/' + item.vod_id + '.html'
+                });
+            });
+        }
+        setResult(d);
+    `,
+    一级: `js:
+        let html = request(input);
+        let json = JSON.parse(html);
+        let d = [];
+        if (json.list) {
+            json.list.forEach(item => {
+                d.push({
+                    title: item.vod_name,
+                    pic_url: item.vod_pic,
+                    desc: item.vod_remarks || item.vod_class,
+                    url: '/bangumi/' + item.vod_id + '.html'
+                });
+            });
+        }
+        setResult(d);
+    `,
     二级: `js:
         let html = request(input);
         VOD = {};
@@ -61,5 +98,20 @@ var rule = {
         });
         VOD.vod_play_url = lists.join('$$$');
     `,
-    搜索: '',
+    搜索: `js:
+        let html = request(input);
+        let json = JSON.parse(html);
+        let d = [];
+        if (json.list) {
+            json.list.forEach(item => {
+                d.push({
+                    title: item.name,
+                    pic_url: item.pic,
+                    desc: '',
+                    url: '/bangumi/' + item.id + '.html'
+                });
+            });
+        }
+        setResult(d);
+    `,
 }
