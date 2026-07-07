@@ -30,7 +30,19 @@
     }
   ],
   "parses": [],
-  "flags": ["youku", "qq", "iqiyi", "qiyi", "letv", "sohu", "tudou", "pptv", "mgtv", "xigua", "bilibili"],
+  "flags": [
+    "youku",
+    "qq",
+    "iqiyi",
+    "qiyi",
+    "letv",
+    "sohu",
+    "tudou",
+    "pptv",
+    "mgtv",
+    "xigua",
+    "bilibili"
+  ],
   "rules": [],
   "ads": []
 }

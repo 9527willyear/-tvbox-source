@@ -5,7 +5,6 @@
 **GitHub 仓库：** `https://github.com/9527willyear/-tvbox-source`
 
 > **注意：**
-> - Gitee 仓库已被封，所以全部迁移到 GitHub。
 > - 由于 TVbox 会缓存 JS 规则，修改后请在 `sources/*.json` 里的 `ext` 地址后面改一下 `?t=数字`（例如 `?t=12`），或者在 TVbox 里清除缓存后重新加载源。
 > - GitHub Pages 地址：`https://9527willyear.github.io/-tvbox-source/`
 
@@ -88,5 +87,4 @@ https://9527willyear.github.io/-tvbox-source/source_merged.json
 
 ## 已知问题
 
-- **歪比（wbbb）**：站点加密太重，暂时无法做成可用源，已放入 `archive/`。
 - **部分站点**：播放链接可能需要特定 Header（Referer/Origin），若遇到解析失败可尝试切换 TVbox 内置解析或换线路。
