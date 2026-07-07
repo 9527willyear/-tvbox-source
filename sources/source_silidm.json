@@ -6,11 +6,21 @@
       "name": "电影先生",
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://gitee.com/willyear/tvbox-source/raw/master/silidm.js?t=11"
+      "ext": "https://9527willyear.github.io/-tvbox-source/silidm.js?t=11"
     }
   ],
   "parses": [],
-  "flags": ["youku", "qq", "iqiyi", "qiyi", "letv", "sohu", "tudou", "pptv", "mgtv"],
+  "flags": [
+    "youku",
+    "qq",
+    "iqiyi",
+    "qiyi",
+    "letv",
+    "sohu",
+    "tudou",
+    "pptv",
+    "mgtv"
+  ],
   "rules": [],
   "ads": []
 }

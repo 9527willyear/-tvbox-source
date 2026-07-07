@@ -2,9 +2,12 @@
 
 本项目包含多个网站的 TVbox 点播源规则。规则脚本放在 `rules/`，源入口文件放在 `sources/`。
 
-**Gitee 仓库：** `https://gitee.com/willyear/tvbox-source`
+**GitHub 仓库：** `https://github.com/9527willyear/-tvbox-source`
 
-> **注意：** 由于 TVbox 会缓存 JS 规则，修改后请在 `sources/*.json` 里的 `ext` 地址后面改一下 `?t=数字`（例如 `?t=7`），或者在 TVbox 里清除缓存后重新加载源。
+> **注意：**
+> - Gitee 仓库已被封，所以全部迁移到 GitHub。
+> - 由于 TVbox 会缓存 JS 规则，修改后请在 `sources/*.json` 里的 `ext` 地址后面改一下 `?t=数字`（例如 `?t=12`），或者在 TVbox 里清除缓存后重新加载源。
+> - GitHub Pages 地址：`https://9527willyear.github.io/-tvbox-source/`
 
 ---
 
@@ -63,22 +66,22 @@
 ### 多站合并源（一个地址包含多个网站）
 
 ```text
-https://gitee.com/willyear/tvbox-source/raw/master/source_merged.json
+https://9527willyear.github.io/-tvbox-source/source_merged.json
 ```
 
 ### 单站源
 
 | 网站 | 导入地址 |
 |------|----------|
-| 稀饭动漫 | `https://gitee.com/willyear/tvbox-source/raw/master/source.json` |
-| 4K 影视 | `https://gitee.com/willyear/tvbox-source/raw/master/source_4kvm.json` |
-| 剧 OK | `https://gitee.com/willyear/tvbox-source/raw/master/source_juok.json` |
-| 西瓜影院 | `https://gitee.com/willyear/tvbox-source/raw/master/source_xigua.json` |
-| 樱花动漫 | `https://gitee.com/willyear/tvbox-source/raw/master/source_dmyh.json` |
-| 电影先生 | `https://gitee.com/willyear/tvbox-source/raw/master/source_silidm.json` |
-| 91 追剧 | `https://gitee.com/willyear/tvbox-source/raw/master/source_91zhuiju.json` |
-| Omofun | `https://gitee.com/willyear/tvbox-source/raw/master/source_omofuna.json` |
-| 4K 资源 | `https://gitee.com/willyear/tvbox-source/raw/master/source_4k_resources.json` |
+| 稀饭动漫 | `https://9527willyear.github.io/-tvbox-source/source.json` |
+| 4K 影视 | `https://9527willyear.github.io/-tvbox-source/source_4kvm.json` |
+| 剧 OK | `https://9527willyear.github.io/-tvbox-source/source_juok.json` |
+| 西瓜影院 | `https://9527willyear.github.io/-tvbox-source/source_xigua.json` |
+| 樱花动漫 | `https://9527willyear.github.io/-tvbox-source/source_dmyh.json` |
+| 电影先生 | `https://9527willyear.github.io/-tvbox-source/source_silidm.json` |
+| 91 追剧 | `https://9527willyear.github.io/-tvbox-source/source_91zhuiju.json` |
+| Omofun | `https://9527willyear.github.io/-tvbox-source/source_omofuna.json` |
+| 4K 资源 | `https://9527willyear.github.io/-tvbox-source/source_4k_resources.json` |
 
 ---
 
@@ -86,8 +89,8 @@ https://gitee.com/willyear/tvbox-source/raw/master/source_merged.json
 
 1. 本地修改 `rules/` 里的 JS 规则文件。
 2. 如果修改了 JS 规则，记得把对应 `sources/` 里的 JSON 文件中的 `ext` 地址后面的 `?t=数字` 改大一个数，避免 TVbox 用旧缓存。
-3. 把修改后的 JS 文件和对应的 JSON 源文件一起上传到 **Gitee 仓库根目录**（和之前一样，不要传文件夹）。
-4. 在 TVbox 里用上面的地址导入或重新加载源。
+3. 把修改后的 JS 文件和对应的 JSON 源文件一起上传到 **GitHub 仓库根目录**（不要传文件夹）。
+4. 在 TVbox 里用上面的 GitHub Pages 地址导入或重新加载源。
 
 ---
 
