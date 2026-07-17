@@ -39,7 +39,7 @@ rule = {
         let items = pdfa(html, '.module-poster-item');
         items.forEach(function(item) {
             let title = pdfh(item, '.module-poster-item-title@text');
-            let link = pdfh(item, 'a@href');
+            let link = pdfh(item, '@href');
             let img = pdfh(item, 'img.lazy@data-original');
             let note = pdfh(item, '.module-item-note@text');
             if (!img || img === '/mxtheme/images/load.gif') {
@@ -111,7 +111,7 @@ rule = {
         let items = pdfa(html, '.module-poster-item');
         items.forEach(function(item) {
             let title = pdfh(item, '.module-poster-item-title@text');
-            let link = pdfh(item, 'a@href');
+            let link = pdfh(item, '@href');
             let img = pdfh(item, 'img.lazy@data-original');
             let note = pdfh(item, '.module-item-note@text');
             if (title && link) {

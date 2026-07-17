@@ -4,8 +4,8 @@
       "key": "wbbb1",
       "name": "歪比巴卜",
       "type": 3,
-      "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
-      "ext": "https://9527willyear.github.io/-tvbox-source/wbbb1.js"
+      "api": "https://cdn.jsdelivr.net/gh/IY-CPU/IY@main/lib/drpy2.min.js",
+      "ext": "https://cdn.jsdelivr.net/gh/9527willyear/-tvbox-source@main/wbbb1.js"
     }
   ],
   "parses": [],
