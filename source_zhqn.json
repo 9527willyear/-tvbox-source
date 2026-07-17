@@ -1,0 +1,26 @@
+{
+  "spider": "",
+  "sites": [
+    {
+      "key": "zhqn",
+      "name": "青年影视",
+      "type": 3,
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
+      "ext": "https://9527willyear.github.io/-tvbox-source/zhqn.js?t=1"
+    }
+  ],
+  "parses": [],
+  "flags": [
+    "youku",
+    "qq",
+    "iqiyi",
+    "qiyi",
+    "letv",
+    "sohu",
+    "tudou",
+    "pptv",
+    "mgtv"
+  ],
+  "rules": [],
+  "ads": []
+}
