@@ -35,6 +35,13 @@
       "type": 3,
       "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
       "ext": "https://9527willyear.github.io/-tvbox-source/silidm.js?t=11"
+    },
+    {
+      "key": "4kvms",
+      "name": "4K影视新站",
+      "type": 3,
+      "api": "https://gh-proxy.com/raw.githubusercontent.com/IY-CPU/IY/main/lib/drpy2.min.js",
+      "ext": "https://9527willyear.github.io/-tvbox-source/4kvms.js?t=1"
     }
   ],
   "parses": [],
