@@ -7,8 +7,8 @@ var rule = {
     },
     编码: 'utf-8',
     timeout: 10000,
-    homeUrl: '/movie?page=1',
-    url: '/fyclass?page=fypage',
+    homeUrl: '/filter?classify=1&page=1',
+    url: '/filter?classify=fyclass&page=fypage',
     searchUrl: '/search?q=**&page=fypage',
     searchable: 2,
     quickSearch: 1,
@@ -18,7 +18,7 @@ var rule = {
     sniffer: 0,
     isVideo: 'http((?!http).){26,}\.(m3u8|mp4|flv|avi|mkv|wmv|mpg|mpeg|mov|ts|3gp)',
     class_name: '电影&电视剧&动漫',
-    class_url: 'movie&tv&anime',
+    class_url: '1&2&3',
     lazy: `js:
         let slug = input.split('/play/').pop().split('/')[0];
         let html = request(input);
