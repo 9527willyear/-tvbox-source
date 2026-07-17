@@ -1,4 +1,4 @@
-var rule = {
+rule = {
     title: '歪比巴卜',
     host: 'https://wbbb1.com',
     url: '/type/{cateId}-{page}.html',
