@@ -78,53 +78,54 @@ var rule = {
         setResult(d);
     `,
     二级: `js:
+        var VOD = {};
         try {
             var html = request(input);
-            VOD = {};
             VOD.vod_id = input;
             VOD.vod_name = pdfh(html, 'h1&&Text') || pdfh(html, '.module-info-heading&&h1&&Text') || pdfh(html, '.module-poster-item-title&&Text') || '未知';
             VOD.vod_pic = pdfh(html, '.module-item-pic&&img&&data-original') || pdfh(html, '.module-item-pic&&img&&src') || pdfh(html, '.module-poster-item&&img&&data-original');
             if (VOD.vod_pic && !VOD.vod_pic.startsWith('http')) VOD.vod_pic = rule.host + VOD.vod_pic;
-            VOD.vod_remarks = pdfh(html, '.module-info-item-content&&Text') || pdfh(html, '.module-item-note&&Text') || '';
             VOD.vod_year = pdfh(html, '.module-info-tag-link&&Text') || '';
             VOD.vod_area = pdfh(html, '.module-info-tag-link:eq(1)&&Text') || '';
             VOD.vod_actor = pdfh(html, '.module-info-item:contains(主演)&&Text') || '';
             VOD.vod_director = pdfh(html, '.module-info-item:contains(导演)&&Text') || '';
             VOD.vod_content = pdfh(html, '.module-info-introduction&&Text') || '';
 
-            // DEBUG: 收集调试信息
-            var debug = [];
+            // 获取视频ID
+            var vid = '';
             var vMatch = input.match(/\/v\/(\d+)\.html/);
             var pMatch = input.match(/\/p\/(\d+)-/);
             var playerMatch = html.match(/var player_aaaa=([^;]+);/);
-            var vid = '';
-            if (vMatch) vid = vMatch[1];
-            else if (pMatch) vid = pMatch[1];
-            else if (playerMatch) {
-                try { vid = JSON.parse(playerMatch[1]).id || ''; } catch (e) {}
+            if (vMatch) {
+                vid = vMatch[1];
+            } else if (pMatch) {
+                vid = pMatch[1];
+            } else if (playerMatch) {
+                try {
+                    var player = JSON.parse(playerMatch[1]);
+                    vid = player.id || '';
+                } catch (e) {}
             }
-            debug.push('input=' + input);
-            debug.push('vid=' + vid);
-            debug.push('html_len=' + html.length);
 
-            var tabItems = pdfa(html, '.module-tab-item');
+            // 获取线路名称
             var sourceNames = [];
+            var tabItems = pdfa(html, '.module-tab-item');
             for (var t = 0; t < tabItems.length; t++) {
                 var name = pdfh(tabItems[t], 'span&&Text') || pdfh(tabItems[t], 'a&&Text') || '';
                 name = name.replace(/\d+$/, '').trim();
                 if (name) sourceNames.push(name);
             }
-            debug.push('tabs=' + tabItems.length + ',names=' + sourceNames.join('|'));
 
+            // 获取播放面板
             var panels = pdfa(html, '.module-list.sort-list.tab-list');
-            if (panels.length === 0) panels = pdfa(html, '.module-play-list');
-            debug.push('panels=' + panels.length);
+            if (panels.length === 0) {
+                panels = pdfa(html, '.module-play-list');
+            }
 
             var playFrom = [];
             var playUrl = [];
             for (var p = 0; p < panels.length; p++) {
                 var links = pdfa(panels[p], '.module-play-list-link');
-                debug.push('panel' + p + '_links=' + links.length);
                 if (links.length === 0) continue;
                 var episodes = [];
                 for (var i = 0; i < links.length; i++) {
@@ -143,17 +144,15 @@ var rule = {
                     playUrl.push(episodes.join('#'));
                 }
             }
-            debug.push('playFrom=' + playFrom.join('|'));
-            VOD.vod_remarks = debug.join(' ; ');
 
             if (playFrom.length === 0) {
-                playFrom.push('独播库');
-                playUrl.push('暂无集数$http://localhost');
+                playFrom.push('调试');
+                playUrl.push('input:' + input + '$http://localhost' + '#vid:' + vid + '$http://localhost' + '#html_len:' + html.length + '$http://localhost' + '#tabs:' + tabItems.length + '$http://localhost' + '#panels:' + panels.length + '$http://localhost');
             }
             VOD.vod_play_from = playFrom.join('$$$');
             VOD.vod_play_url = playUrl.join('$$$');
         } catch (e) {
-            VOD = {vod_name: '详情错误:' + e.message, vod_play_from: '独播库', vod_play_url: '错误$http://localhost'};
+            VOD = {vod_name: '详情错误:' + e.message, vod_play_from: '调试', vod_play_url: '错误$http://localhost'};
         }
         setResult(VOD);
     `,
