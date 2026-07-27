@@ -80,7 +80,12 @@ var rule = {
     二级: `js:
         var VOD = {};
         try {
-            var html = request(input);
+            // 确保 URL 完整
+            var fullUrl = input;
+            if (!fullUrl.startsWith('http')) {
+                fullUrl = rule.host + fullUrl;
+            }
+            var html = request(fullUrl);
             VOD.vod_id = input;
             VOD.vod_name = pdfh(html, 'h1&&Text') || pdfh(html, '.module-info-heading&&h1&&Text') || pdfh(html, '.module-poster-item-title&&Text') || '未知';
             VOD.vod_pic = pdfh(html, '.module-item-pic&&img&&data-original') || pdfh(html, '.module-item-pic&&img&&src') || pdfh(html, '.module-poster-item&&img&&data-original');
@@ -93,8 +98,8 @@ var rule = {
 
             // 获取视频ID
             var vid = '';
-            var vMatch = input.match(/\/v\/(\d+)\.html/);
-            var pMatch = input.match(/\/p\/(\d+)-/);
+            var vMatch = fullUrl.match(/\/v\/(\d+)\.html/);
+            var pMatch = fullUrl.match(/\/p\/(\d+)-/);
             var playerMatch = html.match(/var player_aaaa=([^;]+);/);
             if (vMatch) {
                 vid = vMatch[1];
@@ -147,7 +152,7 @@ var rule = {
 
             if (playFrom.length === 0) {
                 playFrom.push('调试');
-                playUrl.push('input:' + input + '$http://localhost' + '#vid:' + vid + '$http://localhost' + '#html_len:' + html.length + '$http://localhost' + '#tabs:' + tabItems.length + '$http://localhost' + '#panels:' + panels.length + '$http://localhost');
+                playUrl.push('input:' + input + '$http://localhost' + '#fullUrl:' + fullUrl + '$http://localhost' + '#vid:' + vid + '$http://localhost' + '#html_len:' + html.length + '$http://localhost' + '#tabs:' + tabItems.length + '$http://localhost' + '#panels:' + panels.length + '$http://localhost');
             }
             VOD.vod_play_from = playFrom.join('$$$');
             VOD.vod_play_url = playUrl.join('$$$');
