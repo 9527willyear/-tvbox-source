@@ -78,34 +78,22 @@ var rule = {
                 vid = vMatch[1];
             }
             
-            // 解析集数 - 先只取第一个面板
+            // 用正则解析集数，避免 pdfa 兼容问题
             var episodes = [];
-            var playFrom = [];
-            var playUrl = [];
-            
             if (vid) {
-                var panels = pdfa(html, '.module-list.sort-list.tab-list');
-                if (panels.length > 0) {
-                    var links = pdfa(panels[0], '.module-play-list-link');
-                    for (var i = 0; i < links.length; i++) {
-                        var epName = pdfh(links[i], 'span&&Text');
-                        if (!epName) epName = '第' + (i + 1) + '集';
-                        episodes.push(epName + '$/p/' + vid + '-1-' + (i + 1) + '.html');
-                    }
-                    if (episodes.length > 0) {
-                        playFrom.push('默认线路');
-                        playUrl.push(episodes.join('#'));
+                var epMatches = html.matchAll(/<span>第(\d+)集<\/span>/g);
+                var seen = new Set();
+                for (var m of epMatches) {
+                    var num = m[1];
+                    if (!seen.has(num)) {
+                        seen.add(num);
+                        episodes.push('第' + num + '集$/p/' + vid + '-1-' + num + '.html');
                     }
                 }
             }
             
-            if (playFrom.length === 0) {
-                playFrom.push('默认线路');
-                playUrl.push('暂无集数$http://localhost');
-            }
-            
-            VOD.vod_play_from = playFrom.join('$$$');
-            VOD.vod_play_url = playUrl.join('$$$');
+            VOD.vod_play_from = '默认线路';
+            VOD.vod_play_url = episodes.length > 0 ? episodes.join('#') : '暂无集数$http://localhost';
         } catch (e) {
             VOD.vod_name = '详情错误:' + e.message;
             VOD.vod_play_from = '调试';
