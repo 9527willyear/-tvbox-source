@@ -112,11 +112,20 @@ var rule = {
             }
             
             if (vid) {
-                // 找到所有播放列表面板
-                var panels = pdfa(html, '.module-play-list');
+                // 获取线路名称
+                var sourceNames = [];
+                var tabItems = pdfa(html, '.module-tab-item');
+                for (var t = 0; t < tabItems.length; t++) {
+                    var tab = tabItems[t];
+                    var name = pdfh(tab, 'span&&Text') || pdfh(tab, 'a&&Text') || '';
+                    name = name.replace(/\d+$/, '').trim();
+                    if (name) sourceNames.push(name);
+                }
+                
+                // 获取播放面板
+                var panels = pdfa(html, '.module-list.sort-list.tab-list');
                 if (panels.length === 0) {
-                    // 兼容单个列表
-                    panels = [html];
+                    panels = pdfa(html, '.module-play-list');
                 }
                 
                 for (var p = 0; p < panels.length; p++) {
@@ -136,13 +145,13 @@ var rule = {
                         if (epUrl && epUrl.indexOf('/p/') === 0) {
                             episodes.push(epName + '$' + epUrl);
                         } else {
-                            // href为空，按顺序构造
                             episodes.push(epName + '$/p/' + vid + '-' + sourceNum + '-' + (i + 1) + '.html');
                         }
                     }
                     
                     if (episodes.length > 0) {
-                        playFrom.push('线路' + sourceNum);
+                        var sourceName = sourceNames[p] || ('线路' + sourceNum);
+                        playFrom.push(sourceName);
                         playUrl.push(episodes.join('#'));
                     }
                 }
