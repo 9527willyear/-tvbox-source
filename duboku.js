@@ -1,8 +1,7 @@
 var rule = {
     title: '独播库',
     host: 'https://xn--dxts9ku0n.com',
-    url: '/t/fyclass.html',
-    filter_url: '/t/fyclass-fypage.html',
+    url: '/t/fyclass.html?page=fypage',
     searchUrl: '/s/**-------------.html',
     searchable: 2,
     quickSearch: 0,
