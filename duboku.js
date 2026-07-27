@@ -27,6 +27,7 @@ var rule = {
                 var title = pdfh(item, 'a&&title');
                 var pic = pdfh(item, 'img&&data-original');
                 if (!pic) pic = pdfh(item, 'img&&src');
+                if (pic && !pic.startsWith('http')) pic = rule.host + pic;
                 var url = pdfh(item, 'a&&href');
                 var desc = pdfh(item, '.module-item-note&&Text');
                 if (title && url) {
@@ -56,6 +57,7 @@ var rule = {
                 var title = pdfh(item, 'a&&title');
                 var pic = pdfh(item, 'img&&data-original');
                 if (!pic) pic = pdfh(item, 'img&&src');
+                if (pic && !pic.startsWith('http')) pic = rule.host + pic;
                 var url = pdfh(item, 'a&&href');
                 var desc = pdfh(item, '.module-item-note&&Text');
                 if (title && url) {
@@ -141,6 +143,7 @@ var rule = {
                 var title = pdfh(item, 'a&&title');
                 var pic = pdfh(item, 'img&&data-original');
                 if (!pic) pic = pdfh(item, 'img&&src');
+                if (pic && !pic.startsWith('http')) pic = rule.host + pic;
                 var url = pdfh(item, 'a&&href');
                 var desc = pdfh(item, '.module-item-note&&Text');
                 if (title && url) {
