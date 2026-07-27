@@ -82,9 +82,10 @@ var rule = {
             var html = request(input);
             VOD = {};
             VOD.vod_id = input;
-            VOD.vod_name = pdfh(html, 'h1&&Text') || pdfh(html, '.module-info-heading&&h1&&Text') || '未知';
-            VOD.vod_pic = pdfh(html, '.module-item-pic&&img&&data-original') || pdfh(html, '.module-item-pic&&img&&src');
-            VOD.vod_remarks = pdfh(html, '.module-info-item-content&&Text') || '';
+            VOD.vod_name = pdfh(html, 'h1&&Text') || pdfh(html, '.module-info-heading&&h1&&Text') || pdfh(html, '.module-poster-item-title&&Text') || '未知';
+            VOD.vod_pic = pdfh(html, '.module-item-pic&&img&&data-original') || pdfh(html, '.module-item-pic&&img&&src') || pdfh(html, '.module-poster-item&&img&&data-original');
+            if (VOD.vod_pic && !VOD.vod_pic.startsWith('http')) VOD.vod_pic = rule.host + VOD.vod_pic;
+            VOD.vod_remarks = pdfh(html, '.module-info-item-content&&Text') || pdfh(html, '.module-item-note&&Text') || '';
             VOD.vod_year = pdfh(html, '.module-info-tag-link&&Text') || '';
             VOD.vod_area = pdfh(html, '.module-info-tag-link:eq(1)&&Text') || '';
             VOD.vod_actor = pdfh(html, '.module-info-item:contains(主演)&&Text') || '';
@@ -93,35 +94,61 @@ var rule = {
 
             var playFrom = [];
             var playUrl = [];
-            var episodes = [];
             
-            var links = pdfa(html, '.module-play-list-link');
-            if (links.length > 0) {
-                for (var i = 0; i < links.length; i++) {
-                    var link = links[i];
-                    var epUrl = pdfh(link, 'a&&href');
-                    var epName = pdfh(link, 'span&&Text') || pdfh(link, 'a&&title');
-                    if (epUrl) {
-                        episodes.push(epName + '$' + epUrl);
+            // 获取视频ID
+            var vid = '';
+            var vMatch = input.match(/\/v\/(\d+)\.html/);
+            var pMatch = input.match(/\/p\/(\d+)-/);
+            var playerMatch = html.match(/var player_aaaa=([^;]+);/);
+            if (vMatch) {
+                vid = vMatch[1];
+            } else if (pMatch) {
+                vid = pMatch[1];
+            } else if (playerMatch) {
+                try {
+                    var player = JSON.parse(playerMatch[1]);
+                    vid = player.id || '';
+                } catch (e) {}
+            }
+            
+            if (vid) {
+                // 找到所有播放列表面板
+                var panels = pdfa(html, '.module-play-list');
+                if (panels.length === 0) {
+                    // 兼容单个列表
+                    panels = [html];
+                }
+                
+                for (var p = 0; p < panels.length; p++) {
+                    var panel = panels[p];
+                    var links = pdfa(panel, '.module-play-list-link');
+                    if (links.length === 0) continue;
+                    
+                    var episodes = [];
+                    var sourceNum = p + 1;
+                    
+                    for (var i = 0; i < links.length; i++) {
+                        var link = links[i];
+                        var epUrl = pdfh(link, 'a&&href');
+                        var epName = pdfh(link, 'span&&Text') || pdfh(link, 'a&&title');
+                        epName = epName.replace(/播放.*第/, '第').replace(/播放.*第/, '第');
+                        
+                        if (epUrl && epUrl.indexOf('/p/') === 0) {
+                            episodes.push(epName + '$' + epUrl);
+                        } else {
+                            // href为空，按顺序构造
+                            episodes.push(epName + '$/p/' + vid + '-' + sourceNum + '-' + (i + 1) + '.html');
+                        }
+                    }
+                    
+                    if (episodes.length > 0) {
+                        playFrom.push('线路' + sourceNum);
+                        playUrl.push(episodes.join('#'));
                     }
                 }
             }
             
-            if (episodes.length === 0) {
-                var idMatch = input.match(/\/v\/(\d+)\.html/);
-                if (idMatch) {
-                    var vid = idMatch[1];
-                    var count = links.length || 1;
-                    for (var j = 1; j <= count; j++) {
-                        episodes.push('第' + j + '集$/p/' + vid + '-1-' + j + '.html');
-                    }
-                }
-            }
-            
-            if (episodes.length > 0) {
-                playFrom.push('独播库');
-                playUrl.push(episodes.join('#'));
-            } else {
+            if (playFrom.length === 0) {
                 playFrom.push('独播库');
                 playUrl.push('暂无集数$http://localhost');
             }
