@@ -202,7 +202,8 @@ var rule = {
                         'Referer': input,
                         'Origin': rule.host
                     };
-                    input = {parse: 0, url: player.url, header: playHeaders};
+                    // 先尝试让 TVBox 自己解析播放
+                    input = {parse: 1, url: player.url, header: playHeaders};
                 }
             }
         } catch (e) {
