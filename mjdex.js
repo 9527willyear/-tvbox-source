@@ -21,14 +21,14 @@ var rule = {
         var d = [];
         try {
             var html = request(input);
-            var list = pdfa(html, '.stui-vodlist__item');
+            var list = pdfa(html, '.a-con-inner');
             for (var i = 0; i < list.length; i++) {
                 var item = list[i];
-                var title = pdfh(item, 'a&&title');
-                var pic = pdfh(item, 'img&&data-original') || pdfh(item, 'img&&data-src') || pdfh(item, 'img&&src');
+                var title = pdfh(item, '.pic&&a&&title') || pdfh(item, '.s1&&a&&title');
+                var pic = pdfh(item, '.pic&&img&&data-src') || pdfh(item, '.pic&&img&&data-original') || pdfh(item, '.pic&&img&&src');
                 if (pic && !pic.startsWith('http')) pic = rule.host + pic;
-                var url = pdfh(item, 'a&&href');
-                var desc = pdfh(item, '.pic-text&&Text') || pdfh(item, '.vod_score&&Text') || '';
+                var url = pdfh(item, '.pic&&a&&href') || pdfh(item, '.s1&&a&&href');
+                var desc = pdfh(item, '.s4&&Text') || pdfh(item, '.s2&&Text') || '';
                 if (title && url) {
                     d.push({title: title, pic_url: pic, desc: desc, url: url});
                 }
@@ -40,14 +40,14 @@ var rule = {
         var d = [];
         try {
             var html = request(input);
-            var list = pdfa(html, '.stui-vodlist__item');
+            var list = pdfa(html, '.a-con-inner');
             for (var i = 0; i < list.length; i++) {
                 var item = list[i];
-                var title = pdfh(item, 'a&&title');
-                var pic = pdfh(item, 'img&&data-original') || pdfh(item, 'img&&data-src') || pdfh(item, 'img&&src');
+                var title = pdfh(item, '.pic&&a&&title') || pdfh(item, '.s1&&a&&title');
+                var pic = pdfh(item, '.pic&&img&&data-src') || pdfh(item, '.pic&&img&&data-original') || pdfh(item, '.pic&&img&&src');
                 if (pic && !pic.startsWith('http')) pic = rule.host + pic;
-                var url = pdfh(item, 'a&&href');
-                var desc = pdfh(item, '.pic-text&&Text') || pdfh(item, '.vod_score&&Text') || '';
+                var url = pdfh(item, '.pic&&a&&href') || pdfh(item, '.s1&&a&&href');
+                var desc = pdfh(item, '.s4&&Text') || pdfh(item, '.s2&&Text') || '';
                 if (title && url) {
                     d.push({title: title, pic_url: pic, desc: desc, url: url});
                 }
@@ -143,14 +143,14 @@ var rule = {
         var d = [];
         try {
             var html = request(input);
-            var list = pdfa(html, '.stui-vodlist__item');
+            var list = pdfa(html, '.a-con-inner');
             for (var i = 0; i < list.length; i++) {
                 var item = list[i];
-                var title = pdfh(item, 'a&&title');
-                var pic = pdfh(item, 'img&&data-original') || pdfh(item, 'img&&data-src') || pdfh(item, 'img&&src');
+                var title = pdfh(item, '.pic&&a&&title') || pdfh(item, '.s1&&a&&title');
+                var pic = pdfh(item, '.pic&&img&&data-src') || pdfh(item, '.pic&&img&&data-original') || pdfh(item, '.pic&&img&&src');
                 if (pic && !pic.startsWith('http')) pic = rule.host + pic;
-                var url = pdfh(item, 'a&&href');
-                var desc = pdfh(item, '.pic-text&&Text') || pdfh(item, '.vod_score&&Text') || '';
+                var url = pdfh(item, '.pic&&a&&href') || pdfh(item, '.s1&&a&&href');
+                var desc = pdfh(item, '.s4&&Text') || pdfh(item, '.s2&&Text') || '';
                 if (title && url) {
                     d.push({title: title, pic_url: pic, desc: desc, url: url});
                 }
@@ -165,7 +165,12 @@ var rule = {
             if (playerMatch) {
                 var player = JSON.parse('{' + playerMatch[1] + '}');
                 if (player.url) {
-                    input = {parse: 1, url: player.url, header: rule.headers};
+                    var playHeaders = {
+                        'User-Agent': rule.headers['User-Agent'],
+                        'Referer': input,
+                        'Origin': rule.host
+                    };
+                    input = {parse: 0, url: player.url, header: playHeaders};
                 }
             }
         } catch (e) {}
