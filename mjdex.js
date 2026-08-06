@@ -180,12 +180,7 @@ var rule = {
             if (playerMatch) {
                 var player = JSON.parse('{' + playerMatch[1] + '}');
                 if (player.url) {
-                    var playHeaders = {
-                        'User-Agent': rule.headers['User-Agent'],
-                        'Referer': input,
-                        'Origin': rule.host
-                    };
-                    input = {parse: 1, url: player.url, header: playHeaders};
+                    input = {parse: 0, url: player.url};
                 }
             }
         } catch (e) {}
