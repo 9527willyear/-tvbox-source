@@ -1,6 +1,7 @@
 var rule = {
     title: '美剧天堂',
     host: 'https://mjdex.cc',
+    homeUrl: '/vod/show/id/20/page/1.html',
     url: '/vod/show/id/fyclass/page/fypage.html',
     searchUrl: '/vod/search.html?wd=**',
     searchable: 2,
@@ -21,15 +22,16 @@ var rule = {
         var d = [];
         try {
             var html = request(input);
-            var list = pdfa(html, '.a-con-inner');
-            for (var i = 0; i < list.length; i++) {
-                var item = list[i];
-                var title = pdfh(item, '.pic&&a&&title') || pdfh(item, '.s1&&a&&title');
-                var pic = pd(item, '.pic&&img&&data-src', input) || pd(item, '.pic&&img&&data-original', input) || pd(item, '.pic&&img&&src', input);
-                var url = pd(item, '.pic&&a&&href', input) || pd(item, '.s1&&a&&href', input);
-                var desc = pdfh(item, '.s4&&Text') || pdfh(item, '.s2&&Text') || '';
+            var matches = html.matchAll(/<div class=\"a-con-inner\">(.*?)<\/div>/gis);
+            for (var m of matches) {
+                var item = m[1];
+                var title = (item.match(/title=\"([^\"]+)\"/) || [])[1];
+                var pic = (item.match(/data-src=\"([^\"]+)\"/) || [])[1];
+                var url = (item.match(/href=\"([^\"]+)\"/) || [])[1];
+                var desc = (item.match(/class=\"s4\"[^>]*>([^<]+)</) || [])[1];
                 if (title && url) {
-                    d.push({title: title, pic_url: pic, desc: desc, url: url});
+                    if (pic && !pic.startsWith('http')) pic = 'https://mjdex.cc' + pic;
+                    d.push({title: title, pic_url: pic || '', desc: desc || '', url: url});
                 }
             }
         } catch (e) {}
@@ -39,15 +41,16 @@ var rule = {
         var d = [];
         try {
             var html = request(input);
-            var list = pdfa(html, '.a-con-inner');
-            for (var i = 0; i < list.length; i++) {
-                var item = list[i];
-                var title = pdfh(item, '.pic&&a&&title') || pdfh(item, '.s1&&a&&title');
-                var pic = pd(item, '.pic&&img&&data-src', input) || pd(item, '.pic&&img&&data-original', input) || pd(item, '.pic&&img&&src', input);
-                var url = pd(item, '.pic&&a&&href', input) || pd(item, '.s1&&a&&href', input);
-                var desc = pdfh(item, '.s4&&Text') || pdfh(item, '.s2&&Text') || '';
+            var matches = html.matchAll(/<div class=\"a-con-inner\">(.*?)<\/div>/gis);
+            for (var m of matches) {
+                var item = m[1];
+                var title = (item.match(/title=\"([^\"]+)\"/) || [])[1];
+                var pic = (item.match(/data-src=\"([^\"]+)\"/) || [])[1];
+                var url = (item.match(/href=\"([^\"]+)\"/) || [])[1];
+                var desc = (item.match(/class=\"s4\"[^>]*>([^<]+)</) || [])[1];
                 if (title && url) {
-                    d.push({title: title, pic_url: pic, desc: desc, url: url});
+                    if (pic && !pic.startsWith('http')) pic = 'https://mjdex.cc' + pic;
+                    d.push({title: title, pic_url: pic || '', desc: desc || '', url: url});
                 }
             }
         } catch (e) {}
@@ -156,15 +159,16 @@ var rule = {
         var d = [];
         try {
             var html = request(input);
-            var list = pdfa(html, '.a-con-inner');
-            for (var i = 0; i < list.length; i++) {
-                var item = list[i];
-                var title = pdfh(item, '.pic&&a&&title') || pdfh(item, '.s1&&a&&title');
-                var pic = pd(item, '.pic&&img&&data-src', input) || pd(item, '.pic&&img&&data-original', input) || pd(item, '.pic&&img&&src', input);
-                var url = pd(item, '.pic&&a&&href', input) || pd(item, '.s1&&a&&href', input);
-                var desc = pdfh(item, '.s4&&Text') || pdfh(item, '.s2&&Text') || '';
+            var matches = html.matchAll(/<div class=\"a-con-inner\">(.*?)<\/div>/gis);
+            for (var m of matches) {
+                var item = m[1];
+                var title = (item.match(/title=\"([^\"]+)\"/) || [])[1];
+                var pic = (item.match(/data-src=\"([^\"]+)\"/) || [])[1];
+                var url = (item.match(/href=\"([^\"]+)\"/) || [])[1];
+                var desc = (item.match(/class=\"s4\"[^>]*>([^<]+)</) || [])[1];
                 if (title && url) {
-                    d.push({title: title, pic_url: pic, desc: desc, url: url});
+                    if (pic && !pic.startsWith('http')) pic = 'https://mjdex.cc' + pic;
+                    d.push({title: title, pic_url: pic || '', desc: desc || '', url: url});
                 }
             }
         } catch (e) {}
