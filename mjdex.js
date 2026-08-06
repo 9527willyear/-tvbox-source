@@ -180,10 +180,21 @@ var rule = {
             if (playerMatch) {
                 var player = JSON.parse('{' + playerMatch[1] + '}');
                 if (player.url) {
-                    input = {parse: 0, url: player.url};
+                    // 兼容 FongMi v5：使用最简配置
+                    input = {
+                        parse: 0,
+                        url: player.url,
+                        header: {
+                            'User-Agent': 'Mozilla/5.0 (Android 13; Mobile) AppleWebKit/537.36 Chrome/120.0.0.0 Mobile Safari/537.36',
+                            'Referer': 'https://mjdex.cc/'
+                        }
+                    };
                 }
             }
-        } catch (e) {}
+        } catch (e) {
+            // 解析失败时返回原始地址让 TVBox 自己嗅探
+            input = {parse: 1, url: input};
+        }
         setResult(input);
     `
 };
