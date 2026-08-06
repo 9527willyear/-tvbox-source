@@ -85,14 +85,29 @@ var rule = {
                 
                 // 解析线路和集数
                 var sourceNames = [];
-                var sourceLinks = playHtml.matchAll(/<a[^>]*href=\"(\/vod\/play\/id\/(\d+)\/sid\/(\d+)\/nid\/1\.html)\"[^>]*>([^<]+)<\/a>/gi);
-                var seenSid = new Set();
-                for (var m of sourceLinks) {
-                    var sid = m[3];
-                    var name = m[4].trim();
-                    if (name && name !== '第1集' && !seenSid.has(sid)) {
-                        seenSid.add(sid);
-                        sourceNames.push({sid: sid, name: name});
+                var mxianluMatch = playHtml.match(/<span class=\"mxianlu[^\"]*\">(.*?)<\/span>/is);
+                if (mxianluMatch) {
+                    var mxianlu = mxianluMatch[1];
+                    // 非活跃线路（带链接）
+                    var inactiveLinks = mxianlu.matchAll(/<a[^>]*href=\"\/vod\/play\/id\/(\d+)\/sid\/(\d+)\/nid\/1\.html\"[^>]*>([^<]+)(?:<small>(\d+)<\/small>)?<\/a>/gi);
+                    var seenSid = new Set();
+                    for (var m of inactiveLinks) {
+                        var sid = m[2];
+                        var name = m[3].trim();
+                        if (name && !seenSid.has(sid)) {
+                            seenSid.add(sid);
+                            sourceNames.push({sid: sid, name: name});
+                        }
+                    }
+                    // 活跃线路（当前线路，无链接）
+                    var activeMatch = mxianlu.match(/<a[^>]*class=\"active\"[^>]*>([^<]+)(?:<small>(\d+)<\/small>)?<\/a>/i);
+                    if (activeMatch) {
+                        var currentSid = playLink.match(/sid\/(\d+)/)[1];
+                        var activeName = activeMatch[1].trim();
+                        if (activeName && !seenSid.has(currentSid)) {
+                            seenSid.add(currentSid);
+                            sourceNames.unshift({sid: currentSid, name: activeName});
+                        }
                     }
                 }
                 
