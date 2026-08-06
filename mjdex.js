@@ -25,9 +25,8 @@ var rule = {
             for (var i = 0; i < list.length; i++) {
                 var item = list[i];
                 var title = pdfh(item, '.pic&&a&&title') || pdfh(item, '.s1&&a&&title');
-                var pic = pdfh(item, '.pic&&img&&data-src') || pdfh(item, '.pic&&img&&data-original') || pdfh(item, '.pic&&img&&src');
-                if (pic && !pic.startsWith('http')) pic = rule.host + pic;
-                var url = pdfh(item, '.pic&&a&&href') || pdfh(item, '.s1&&a&&href');
+                var pic = pd(item, '.pic&&img&&data-src', input) || pd(item, '.pic&&img&&data-original', input) || pd(item, '.pic&&img&&src', input);
+                var url = pd(item, '.pic&&a&&href', input) || pd(item, '.s1&&a&&href', input);
                 var desc = pdfh(item, '.s4&&Text') || pdfh(item, '.s2&&Text') || '';
                 if (title && url) {
                     d.push({title: title, pic_url: pic, desc: desc, url: url});
@@ -44,9 +43,8 @@ var rule = {
             for (var i = 0; i < list.length; i++) {
                 var item = list[i];
                 var title = pdfh(item, '.pic&&a&&title') || pdfh(item, '.s1&&a&&title');
-                var pic = pdfh(item, '.pic&&img&&data-src') || pdfh(item, '.pic&&img&&data-original') || pdfh(item, '.pic&&img&&src');
-                if (pic && !pic.startsWith('http')) pic = rule.host + pic;
-                var url = pdfh(item, '.pic&&a&&href') || pdfh(item, '.s1&&a&&href');
+                var pic = pd(item, '.pic&&img&&data-src', input) || pd(item, '.pic&&img&&data-original', input) || pd(item, '.pic&&img&&src', input);
+                var url = pd(item, '.pic&&a&&href', input) || pd(item, '.s1&&a&&href', input);
                 var desc = pdfh(item, '.s4&&Text') || pdfh(item, '.s2&&Text') || '';
                 if (title && url) {
                     d.push({title: title, pic_url: pic, desc: desc, url: url});
@@ -162,9 +160,8 @@ var rule = {
             for (var i = 0; i < list.length; i++) {
                 var item = list[i];
                 var title = pdfh(item, '.pic&&a&&title') || pdfh(item, '.s1&&a&&title');
-                var pic = pdfh(item, '.pic&&img&&data-src') || pdfh(item, '.pic&&img&&data-original') || pdfh(item, '.pic&&img&&src');
-                if (pic && !pic.startsWith('http')) pic = rule.host + pic;
-                var url = pdfh(item, '.pic&&a&&href') || pdfh(item, '.s1&&a&&href');
+                var pic = pd(item, '.pic&&img&&data-src', input) || pd(item, '.pic&&img&&data-original', input) || pd(item, '.pic&&img&&src', input);
+                var url = pd(item, '.pic&&a&&href', input) || pd(item, '.s1&&a&&href', input);
                 var desc = pdfh(item, '.s4&&Text') || pdfh(item, '.s2&&Text') || '';
                 if (title && url) {
                     d.push({title: title, pic_url: pic, desc: desc, url: url});
