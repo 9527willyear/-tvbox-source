@@ -185,7 +185,7 @@ var rule = {
                         'Referer': input,
                         'Origin': rule.host
                     };
-                    input = {parse: 0, url: player.url, header: playHeaders};
+                    input = {parse: 1, url: player.url, header: playHeaders};
                 }
             }
         } catch (e) {}
